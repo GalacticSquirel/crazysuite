@@ -46,6 +46,7 @@ class MainWindow(QMainWindow):
         widget = QWidget()
         layout = QVBoxLayout()
         self.setLayout(layout)
+        self.setWindowIcon(QtGui.QIcon('Logo.ico'))
 
 
         self.stackedLayout = QStackedLayout()
