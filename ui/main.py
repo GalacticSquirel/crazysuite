@@ -25,8 +25,8 @@ from PyQt6.QtCore import (
 from PyQt6.QtGui import QColor, QPalette
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtWidgets import * # pyright: ignore
-import bcrypt
-from cryptography.fernet import Fernet
+#import bcrypt
+#from cryptography.fernet import Fernet
 
 from pathlib import Path
 
@@ -84,14 +84,30 @@ class MainWindow(QMainWindow):
     
     def login_page(self):
         # Login
+        # self.login = QWidget()
+        # self.login_grid_layout = QGridLayout()
+        # self.login_layout = QFormLayout()
+        # self.login_layout.addRow("Username:", QLineEdit())
+        # self.login_layout.addRow("Password:", QLineEdit())
+        # self.login_grid_layout.addChildLayout(self.login_layout)
+        # self.login.setLayout(self.login_grid_layout)
+
         self.login = QWidget()
-        self.login_grid_layout = QGridLayout()
         self.login_layout = QFormLayout()
+
+        self.login_label = QLabel("Sign In")
+        self.login_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.login_label.setStyleSheet("font-size: 30px;")
+        self.login_layout.addWidget(self.login_label)
+
         self.login_layout.addRow("Username:", QLineEdit())
         self.login_layout.addRow("Password:", QLineEdit())
-        self.login_grid_layout.addWidget(self.login_layout, 0,0)
-        self.login.setLayout(self.login_grid_layout)
+        self.log_in_button = QPushButton("Sign In")
+        self.login_layout.addWidget(self.log_in_button)
+        self.login_layout.addWidget(self.log_in_button)
         
+        self.login.setLayout(self.login_layout)
+
         return self.login
 
     def sign_up_page(self):
@@ -102,7 +118,7 @@ class MainWindow(QMainWindow):
         self.sign_up_layout.addRow("Email:", QLineEdit())
         self.sign_up_layout.addRow("Username:", QLineEdit())
         self.sign_up_layout.addRow("Password:", QLineEdit())
-        self.sign_up_grid_layout.addWidget(self.sign_up_layout, 0,0)
+        self.sign_up_grid_layout.addChildLayout(self.sign_up_layout)
         self.sign_up.setLayout(self.sign_up_layout)
         return self.sign_up
 
