@@ -18,4 +18,4 @@ def webhook():
     else:
         return jsonify({"message" : "Failed"})
 
-app.run(threaded=True, port=os.getenv("PORT"))
+app.run(host='0.0.0.0', port=8080)
