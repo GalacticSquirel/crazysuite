@@ -1,3 +1,4 @@
 Flask==2.2.2
 GitPython==3.1.27
+PyQt6==6.3.1
 pipreqs
