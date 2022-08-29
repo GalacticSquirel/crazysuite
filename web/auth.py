@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from models import User
 from flask_login import login_user, logout_user, login_required, current_user
 from __init__ import db
-
+import re
 
 auth = Blueprint('auth', __name__) # create a Blueprint object that we name 'auth'
 
@@ -37,11 +37,46 @@ def signup(): # define the sign up function
     if request.method=='GET': # If the request is GET we return the sign up page and forms
         return render_template('signup.html')
     else: # if the request is POST, then we check if the email doesn't already exist and then we save data
-        email = request.form.get('email')
+        email = str(request.form.get('email'))
         name = request.form.get('name')
         password = request.form.get('password')
+        
+        errors = []
+        regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+        if not (re.fullmatch(regex, email)):
+            flash("Invalid Email")
+            return redirect(url_for('auth.signup'))
+    
+        if name == "" :
+            flash("Invalid Name, you must have one")
+            return redirect(url_for('auth.signup'))
+        if 4 < len(name):
+            print(len(name))
+            flash("Invalid Name, must be at least 4 characters")
+            return redirect(url_for('auth.signup'))
+        l, u, p, d = 0, 0, 0, 0
+        special = [" ","!",'"',"#","$","%","&","'","(",")","*","+",",","-",".","/",":",";","<","=",">","?","@","[","]","^","_","`","{","|","}","~"]
+        s = str(password)
+        if s == "":
+            flash("Invalid Password, you must have one")
+            return redirect(url_for('auth.signup'))
+        if (len(s) >= 8):
+            for i in s:
+                if (i.islower()):
+                    l+=1           
+                if (i.isupper()):
+                    u+=1           
+                if (i.isdigit()):
+                    d+=1           
+                if i in special:
+                    p+=1          
+        if not (l>=1 and u>=1 and p>=1 and d>=1 and l+p+u+d==len(s)):
+            
+            flash("Invalid Password, include at least one upper and lower letters and one number and a special character")
+            return redirect(url_for('auth.signup'))
+        
         ip = str(request.remote_addr)
-        print(ip)
+
 
         user = User.query.filter_by(email=email).first() # if this returns a user, then the email already exists in database
         if user: # if a user is found, we want to redirect back to signup page so user can try again
