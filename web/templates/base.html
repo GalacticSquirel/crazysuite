@@ -25,14 +25,14 @@
             <nav class="nav">
                 <ul class="menu">
                     <li><a href="{{ url_for('main.index') }}">Home</a></li>
-                    <!-- <li><a href="{{ url_for('main.random') }}">Random</a> </li> -->
-                    <li><a href="{{ url_for('main.contact') }}">Shop</a></li>
+
+                    <li><a href="{{ url_for('main.shop') }}">Shop</a></li>
 
                     {% if current_user.is_authenticated %}
-                    <li><a href="{{ url_for('main.controls') }}">Products</a></li>
+                    <li><a href="{{ url_for('main.products') }}">Products</a></li>
                     {% endif %}
                     {% if current_user.is_authenticated %}
-                    <li><a href="{{ url_for('main.profile') }}">Account</a></li>
+                    <li><a href="{{ url_for('main.account') }}">Account</a></li>
                     {% endif %}
                     <li><a href="{{ url_for('auth.signup') }}">Sign Up</a></li>
                     {% if current_user.is_authenticated %}

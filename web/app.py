@@ -22,39 +22,24 @@ def webhook():
         return jsonify({"error" : "Failed"})
 @main.route('/') 
 def index():
-    return render_template('home.html')
-
-@main.route("/jquery.js")
-def jquery():
-    return send_file('templates//jquery.js')
-
-@main.route("/nicepage.js")
-def nicepagejs():
-    return send_file('templates//nicepage.js')
+    return render_template('index.html')
 
 @main.route('/home')
 def homehtml():
-    return send_file('templates//home.html')
+    return send_file('templates//index.html')
 
 @main.route("/favicon.ico")
 def favicon():
     return send_file("templates//favicon.ico", mimetype='image/gif')
 
-@main.route('/profile') 
-def profile():
-    return render_template('profile.html')
+@main.route('/account') 
+def account():
+    return render_template('account.html')
 
-@main.route('/random')
-def random():
-    return render_template("random.html")
+@main.route('/shop')
+def shop():
+    return render_template("shop.html")
 
-@main.route('/contact')
-def contact():
-    return render_template("contact.html")
-
-@main.route('/main.css')
-def maincss():
-    return send_file('templates//main.css')
 @main.route('/login.css')
 def logincss():
     return send_file('templates//login.css')
@@ -63,51 +48,19 @@ def logincss():
 def stylecss():
     return send_file('templates//style.css')
 
-@main.route('/profile.css')
-def profilecss():
-    return send_file('templates//profile.css')
+@main.route('/account.css')
+def accountcss():
+    return send_file('templates//account.css')
 
-@main.route('/nicepage.css')
-def nicepagecss():
-    return send_file('templates//nicepage.css')
+@main.route("/products.css")
+def productscss():
+    return send_file("templates//products.css")
 
-@main.route("/controls.css")
-def controlscss():
-    return send_file("templates//controls.css")
-
-@main.route("/monitor-on")
-@login_required
-def monitoron():
-    with open("states.json","r") as f:
-        states = json.loads(f.read())
-    states["screens"] = "On"
-    
-    # def send():
-    #     win32gui.SendMessage(win32con.HWND_BROADCAST, win32con.WM_SYSCOMMAND, win32con.SC_MONITORPOWER, 2)
-    # t = threading.Thread(target=send)
-    # t.start()
-    return redirect(url_for("main.controls"))
-@main.route("/monitor-off")
-@login_required
-def monitoroff():
-    with open("states.json","r") as f:
-        states = json.loads(f.read())
-    states["screens"] = "Off"
-    
-    # def send():
-    #     win32gui.SendMessage(win32con.HWND_BROADCAST, win32con.WM_SYSCOMMAND, win32con.SC_MONITORPOWER, 1)
-    # t = threading.Thread(target=send)
-    # t.start()
-    return redirect(url_for("main.controls"))
-    
 app = create_app()
-@main.route("/controls")
+@main.route("/products")
 @login_required  
-def controls():
-    with open("states.json","r") as f:
-        states = json.loads(f.read())
-    print(states)
-    return render_template('controls.html', name=current_user.name, comp_state=states["computer"], screen_state=states["screens"],on_url=url_for("main.monitoron"))
+def products():
+    return render_template('products.html', name=current_user.name)
 
 if __name__ == '__main__':
     db.create_all(app=create_app())
