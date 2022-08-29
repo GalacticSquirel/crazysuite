@@ -20,13 +20,10 @@ def webhook():
         return jsonify({"message" : str(repopull)})
     else:
         return jsonify({"error" : "Failed"})
+    
 @main.route('/') 
 def index():
     return render_template('index.html')
-
-@main.route('/home')
-def homehtml():
-    return send_file('templates//index.html')
 
 @main.route("/favicon.ico")
 def favicon():
@@ -39,6 +36,11 @@ def account():
 @main.route('/shop')
 def shop():
     return render_template("shop.html")
+
+@main.route("/products")
+@login_required  
+def products():
+    return render_template('products.html', name=current_user.name)
 
 @main.route('/login.css')
 def logincss():
@@ -57,10 +59,7 @@ def productscss():
     return send_file("templates//products.css")
 
 app = create_app()
-@main.route("/products")
-@login_required  
-def products():
-    return render_template('products.html', name=current_user.name)
+
 
 if __name__ == '__main__':
     db.create_all(app=create_app())
