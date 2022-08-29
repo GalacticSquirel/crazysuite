@@ -31,14 +31,16 @@
                     {% if current_user.is_authenticated %}
                     <li><a href="{{ url_for('main.products') }}">Products</a></li>
                     {% endif %}
+                    
                     {% if current_user.is_authenticated %}
                     <li><a href="{{ url_for('main.account') }}">Account</a></li>
                     {% endif %}
-                    {% if not current_user.is_authenticated %}
-                    <li><a href="{{ url_for('auth.signup') }}">Sign Up</a></li>
-                    {% endif %}
                     {% if current_user.is_authenticated %}
                     <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+                    {% endif %}
+
+                    {% if not current_user.is_authenticated %}
+                    <li><a href="{{ url_for('auth.signup') }}">Sign Up</a></li>
                     {% endif %}
                     {% if not current_user.is_authenticated %}
                     <li><a href="{{ url_for('auth.login') }}">Login</a></li>

@@ -30,8 +30,9 @@ def favicon():
     return send_file("templates//favicon.ico", mimetype='image/gif')
 
 @main.route('/account') 
+@login_required
 def account():
-    return render_template('account.html')
+    return render_template('account.html', name=current_user.name)
 
 @main.route('/shop')
 def shop():
