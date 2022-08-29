@@ -27,7 +27,7 @@
                     <li><a href="{{ url_for('main.index') }}">Home</a></li>
                     <!-- <li><a href="{{ url_for('main.random') }}">Random</a> </li> -->
                     <li><a href="{{ url_for('main.contact') }}">Contact</a></li>
-                    <li><a href="{{ url_for('main.profile') }}">GCSE Dates</a></li>
+                    <li><a href="{{ url_for('auth.signup') }}">Sign Up</a></li>
                     {% if not current_user.is_authenticated %}
                     <li><a href="{{ url_for('auth.login') }}">Login</a></li>
                     {% endif %}
@@ -35,7 +35,7 @@
                     <li><a href="{{ url_for('main.controls') }}">Controls</a></li>
                     {% endif %}
                     {% if current_user.is_authenticated %}
-                    <li><a href="{{ url_for('auth.signup') }}">Sign Up</a></li>
+                    <li><a href="{{ url_for('main.profile') }}">Profile</a></li>
                     {% endif %}
                     {% if current_user.is_authenticated %}
                     <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
