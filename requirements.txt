@@ -1,9 +1,10 @@
+config==0.5.1
 Flask==2.2.2
+Flask_Login==0.6.2
+Flask_SQLAlchemy==2.5.1
 GitPython==3.1.27
+mysql_connector_repackaged==0.3.1
+pandas==1.4.3
+psycopg2==2.9.3
 PyQt6==6.3.1
-pipreqs
-flask
-flask-sqlalchemy
-flask-login
-werkzeug
-pandas
+Werkzeug==2.2.2
