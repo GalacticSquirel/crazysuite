@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- App title -->
-    <title>Crazy Suite</title>
+    <title>Responsive Pure CSS Menu</title>
     <!-- Link CSS file -->
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css" />
@@ -25,15 +25,21 @@
             <nav class="nav">
                 <ul class="menu">
                     <li><a href="{{ url_for('main.index') }}">Home</a></li>
-                    <li><a href="{{ url_for('main.shop') }}">Shop</a></li>
+                    <!-- <li><a href="{{ url_for('main.random') }}">Random</a> </li> -->
+                    <li><a href="{{ url_for('main.contact') }}">Shop</a></li>
+
                     {% if current_user.is_authenticated %}
-                    <li><a href="{{ url_for('main.products') }}">Products</a></li>
-                    <li><a href="{{ url_for('main.account') }}">Account</a></li>
+                    <li><a href="{{ url_for('main.controls') }}">Products</a></li>
+                    {% endif %}
+                    {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('main.profile') }}">Account</a></li>
+                    {% endif %}
+                    <li><a href="{{ url_for('auth.signup') }}">Sign Up</a></li>
+                    {% if current_user.is_authenticated %}
                     <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
                     {% endif %}
                     {% if not current_user.is_authenticated %}
                     <li><a href="{{ url_for('auth.login') }}">Login</a></li>
-                    <li><a href="{{ url_for('auth.signup') }}">Sign Up</a></li>
                     {% endif %}
                 </ul>
             </nav>
