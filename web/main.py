@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    return jsonify({"message" : "Hello"})
+    return jsonify({"message" : "This website does not have a homepage"})
 
 @app.route('/update_server', methods=['POST'])
 def webhook():
