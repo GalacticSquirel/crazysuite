@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- App title -->
+    <title>Responsive Pure CSS Menu</title>
+    <!-- Link CSS file -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css" />
+    <!-- Navigation bar -->
+
+</head>
+
+<body>
+    <section class="hero is-fullheight">
+        <header class="header">
+            <!-- Logo -->
+            <a href="#" class="logo">OG</a>
+            <!-- Hamburger icon -->
+            <input class="side-menu" type="checkbox" id="side-menu"/>
+            <label class="hamb" for="side-menu"><span class="hamb-line"></span></label>
+            <!-- Menu -->
+            <nav class="nav">
+                <ul class="menu">
+                    <li><a href="{{ url_for('main.index') }}">Home</a></li>
+                    <!-- <li><a href="{{ url_for('main.random') }}">Random</a> </li> -->
+                    <li><a href="{{ url_for('main.contact') }}">Contact</a></li>
+                    <li><a href="{{ url_for('main.profile') }}">GCSE Dates</a></li>
+                    {% if not current_user.is_authenticated %}
+                    <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+                    {% endif %}
+                    {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('main.controls') }}">Controls</a></li>
+                    {% endif %}
+                    {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('auth.signup') }}">Sign Up</a></li>
+                    {% endif %}
+                    {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </header>
+
+            
+        <div class="hero-body", id="A1">
+            <div class="container has-text-centered">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
