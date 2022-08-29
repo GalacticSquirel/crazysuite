@@ -16,4 +16,4 @@ def webhook():
 
         return jsonify({"message" : str(repopull)})
     else:
-        return jsonify({"message" : "Failed"})
+        return jsonify({"error" : "Failed"})
