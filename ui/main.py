@@ -5,6 +5,7 @@ import math
 from multiprocessing.pool import ThreadPool
 import os
 import os
+from re import template
 import sys
 import zlib
 from concurrent.futures import ThreadPoolExecutor
@@ -54,6 +55,7 @@ class MainWindow(QMainWindow):
         self.stackedLayout.addWidget(self.start_page())
         self.stackedLayout.addWidget(self.login_page())
         self.stackedLayout.addWidget(self.sign_up_page())
+        self.stackedLayout.addWidget(self.main_page())
         
         layout.addLayout(self.stackedLayout)
         widget.setLayout(layout)
@@ -78,6 +80,14 @@ class MainWindow(QMainWindow):
         self.register_button = QPushButton("Register")
         self.register_button.clicked.connect(lambda:self.switchPage(2))
         self.start_layout.addWidget(self.register_button, 2,0)
+
+        #TEMP
+
+        self.main_button = QPushButton("Main")
+        self.main_button.clicked.connect(lambda:self.switchPage(3))
+        self.start_layout.addWidget(self.main_button, 3,0)
+
+        #TEMP
         
         self.start.setLayout(self.start_layout)
         
@@ -87,16 +97,8 @@ class MainWindow(QMainWindow):
     def login_page(self):
         # Login
 
-        # self.login = QWidget()
-        # self.login_grid_layout = QGridLayout()
-        # self.login_layout = QFormLayout()
-        # self.login_layout.addRow("Username:", QLineEdit())
-        # self.login_layout.addRow("Password:", QLineEdit())
-        # self.login_grid_layout.addChildLayout(self.login_layout)
-        # self.login.setLayout(self.login_grid_layout)
-
         self.login = QWidget()
-        self.login_layout = QFormLayout()
+        self.login_layout = QGridLayout()
 
         self.alert_label = QLabel("", self)
         self.alert_label.setGeometry(0, -30, 500, 30)
@@ -106,13 +108,20 @@ class MainWindow(QMainWindow):
         self.login_label = QLabel("Sign In")
         self.login_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.login_label.setStyleSheet("font-size: 30px;")
-        self.login_layout.addWidget(self.login_label)
+        self.login_layout.addWidget(self.login_label, 0,0)
 
-        self.login_layout.addRow("Username:", QLineEdit())
-        self.login_layout.addRow("Password:", QLineEdit())
-        self.login_button = QPushButton("Sign In") # Database connection needed
-        self.login_layout.addWidget(self.login_button)
-        self.login_layout.addWidget(self.login_button)
+        self.username_login_table = QLineEdit()
+        self.username_login_table.setPlaceholderText("Username")
+        self.login_layout.addWidget(self.username_login_table, 1,0)
+
+        self.password_login_table = QLineEdit()
+        self.password_login_table.setPlaceholderText("Password")
+        self.login_layout.addWidget(self.password_login_table, 2,0)
+
+        self.login_form_button = QPushButton("Sign In") # Database connection needed
+        self.login_layout.addWidget(self.login_form_button, 3,0)
+        self.login_form_button.clicked.connect(self.login_form_processor)
+
         self.back_button = QPushButton("Back")
         self.login_layout.addWidget(self.back_button)
         self.back_button.clicked.connect(lambda:self.switchPage(0))
@@ -124,17 +133,8 @@ class MainWindow(QMainWindow):
     def sign_up_page(self):
         # Signup
 
-        # self.sign_up = QWidget()
-        # self.sign_up_grid_layout = QGridLayout()
-        # self.sign_up_layout = QFormLayout()
-        # self.sign_up_layout.addRow("Email:", QLineEdit())
-        # self.sign_up_layout.addRow("Username:", QLineEdit())
-        # self.sign_up_layout.addRow("Password:", QLineEdit())
-        # self.sign_up_grid_layout.addChildLayout(self.sign_up_layout)
-        # self.sign_up.setLayout(self.sign_up_layout)
-
         self.sign_up = QWidget()
-        self.sign_up_layout = QFormLayout()
+        self.sign_up_layout = QGridLayout()
 
         self.alert_label = QLabel("", self)
         self.alert_label.setGeometry(0, -30, 500, 30)
@@ -144,14 +144,29 @@ class MainWindow(QMainWindow):
         self.sign_up_label = QLabel("Register")
         self.sign_up_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.sign_up_label.setStyleSheet("font-size: 30px;")
-        self.sign_up_layout.addWidget(self.sign_up_label)
+        self.sign_up_layout.addWidget(self.sign_up_label, 0,0)
 
-        self.sign_up_layout.addRow("Email:", QLineEdit())
-        self.sign_up_layout.addRow("Username:", QLineEdit())
-        self.sign_up_layout.addRow("Password:", QLineEdit())
-        self.sign_up_button = QPushButton("Register") # Database connection needed
-        self.sign_up_layout.addWidget(self.sign_up_button)
-        self.sign_up_layout.addWidget(self.sign_up_button)
+        self.email_sign_up_table = QLineEdit()
+        self.email_sign_up_table.setPlaceholderText("Email")
+        self.sign_up_layout.addWidget(self.email_sign_up_table, 1,0)
+
+        self.username_sign_up_table = QLineEdit()
+        self.username_sign_up_table.setPlaceholderText("Username")
+        self.sign_up_layout.addWidget(self.username_sign_up_table, 2,0)
+
+        self.password_sign_up_table = QLineEdit()
+        self.password_sign_up_table.setPlaceholderText("Password")
+        self.sign_up_layout.addWidget(self.password_sign_up_table, 3,0)
+
+        self.password_confirm_sign_up_table = QLineEdit()
+        self.password_confirm_sign_up_table.setPlaceholderText("Confirm Password")
+        self.sign_up_layout.addWidget(self.password_confirm_sign_up_table, 4,0)
+
+
+        self.sign_up_form_button = QPushButton("Register") # Database connection needed
+        self.sign_up_layout.addWidget(self.sign_up_form_button, 5,0)
+        self.sign_up_form_button.clicked.connect(self.sign_up_form_processor)
+
         self.back_button = QPushButton("Back")
         self.sign_up_layout.addWidget(self.back_button)
         self.back_button.clicked.connect(lambda:self.switchPage(0))
@@ -160,10 +175,44 @@ class MainWindow(QMainWindow):
 
         return self.sign_up
 
+    def main_page(self):
+        self.main = QWidget()
+        self.main_layout = QGridLayout()
+
+        self.alert_label = QLabel("", self)
+        self.alert_label.setGeometry(0, -30, 500, 30)
+        self.alert_label.setStyleSheet("")
+        self.alert_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.main_label = QLabel("Welcome To Crazy Suite")
+        self.main_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.main_label.setStyleSheet("font-size: 30px;")
+        self.main_layout.addWidget(self.main_label, 0,0)
+
+        self.owned_products_label = QLabel("Products:", self)
+        self.main_layout.addWidget(self.owned_products_label, 1,0)
+
+        # self.owned_products = QHBoxLayout()
+        # self.template_owned_product = 
+        # self.owned_products.addItem(self.template_owned_product)
+
+        self.main.setLayout(self.main_layout)
+
+        return self.main
     
     def switchPage(self, to):
         self.stackedLayout.setCurrentIndex(to)
-        
+    
+    def login_form_processor(self):
+        username = self.username_login_table.text()
+        password = self.password_login_table.text()
+    
+    def sign_up_form_processor(self):
+        email = self.email_sign_up_table.text()
+        username = self.username_sign_up_table.text()
+        password = self.password_sign_up_table.text()
+        confirm_password = self.password_confirm_sign_up_table.text()
+
     # def UI(self):
     #     spacing = 20
         
