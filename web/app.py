@@ -59,8 +59,15 @@ def accountcss():
 def productscss():
     return send_file("templates//products.css")
 
-app = create_app()
+@main.route("/shop.css")
+def shopcss():
+    return send_file("templates//shop.css")
 
+@main.route("/placehold_image")
+def placehold():
+    return send_file("templates//place_hold.png")
+
+app = create_app()
 
 if __name__ == '__main__':
     db.create_all(app=create_app())
