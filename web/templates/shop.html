@@ -3,69 +3,41 @@
 {% block content %}
 <link rel="stylesheet" href="shop.css">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<div class="tools">
-    <div class="search-area">
-        <input type="text" id="search" placeholder="Search"/>
-        <button id="searchbutton">Go</button>
-    </div>
-    <div class="settings">
-        <button id="view">Switch View</button>
-    </div>
-</div>
-<div class="products products-table">
-    <div class="product" onclick="location.href='place';">
-        <div class="product-img">
-            <img src="{{ url_for('main.placehold') }}">
+<div vertical-layout id="container">
+    <div vertical-layout id="vertical-layout">
+        <div id="container-tools">
+            <div class="tools">
+                <div class="search-area">
+                    <input type="text" id="search" placeholder="Search"/>
+                    <button id="searchbutton">Go</button>
+                </div>
+                <div class="settings">
+                    <button id="view">Switch View</button>
+                </div>
+            </div>
         </div>
-        <div class="product-content">
-            <h3>
-                Product One
-                <small>this does whatever product one does</small>
-            </h3>
-            <p class="product-text price">$9.99</p>
-            <p class="product-text genre">Software</p>
-        </div>
-    </div>
-    <div class="product">
-        <div class="product-img">
-            <img src="{{ url_for('main.placehold') }}">
-        </div>
-        <div class="product-content">
-            <h3>
-                Product Two
-                <small>this does whatever product two does</small>
-            </h3>
-            <p class="product-text price">$9.99</p>
-            <p class="product-text genre">Software</p>
-        </div>
-    </div>
-    <div class="product">
-        <div class="product-img">
-            <img src="{{ url_for('main.placehold') }}">
-        </div>
-        <div class="product-content">
-            <h3>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                <small>Consectetur Adipisicing</small>
-            </h3>
-            <p class="product-text price">$9.99</p>
-            <p class="product-text genre">DVD Rental</p>
+        <div id="container-products">
+            <div class="products products-table">
+                {% for item in shop_items %}
+
+                <div class="product" onclick="location.href='{{ item["url"] }}';">
+                    <div class="product-img">
+                        <img src="{{ item['image_url'] }}">
+                    </div>
+                    <div class="product-content">
+                        <h3>
+                            {{ item["name"] }}
+                            <small>{{ item["description"] }}</small>
+                        </h3>
+                        <p class="product-text price">{{ item["price"] }}</p>
+                        <p class="product-text genre">{{ item["genre"] }}</p>
+                    </div>
+                </div>
+
+                {% endfor %}
+            </div>
         </div>
     </div>
-    <div class="product">
-        <div class="product-img">
-            <img src="{{ url_for('main.placehold') }}">
-        </div>
-        <div class="product-content">
-            <h3>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit
-                <small>Consectetur Adipisicing</small>
-            </h3>
-            <p class="product-text price">$9.99</p>
-            <p class="product-text genre">DVD Rental</p>
-        </div>
-    </div>
-</div>
 
 <script>
     $("#view").click(function () {

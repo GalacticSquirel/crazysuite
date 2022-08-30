@@ -1,0 +1,41 @@
+body {
+    font-family: "Nunito", sans-serif;
+    background-color: #eeeeee;
+}
+.container-space {
+    margin-top: 2rem;
+}
+.product-thumbnails {
+    display: flex;
+    margin-top: 2rem;
+}
+.product-thumbnails > ul {
+    display: flex;
+    list-style: none;
+    padding-left: 0;
+}
+.product-thumbnails > li {
+    margin-right: 10px;
+}
+.product-thumbnails > ul > li > img {
+    width: 100px;
+    cursor: pointer;
+}
+.thumbnail-active {
+    border: 2px solid #000;
+}
+.nav-link > img {
+    width: 40px;
+    border-radius: 8px;
+    margin-right: 10px;
+}
+.btn-custom-color {
+    border: 2px solid #4fc08d;
+    color: #4fc08d;
+}
+.btn-custom-color:hover {
+    border: 2px solid #4fc08d;
+    background-color: #4fc08d;
+    color: #ffffff;
+}
+<link rel="stylesheet" href="productdetails.css" />

@@ -1,0 +1,12 @@
+{% extends "base.html" %} {% block content %}
+<link rel="stylesheet" href="productdetails.css">
+<div vertical-layout id="container">
+    <h1>{{ item_details["name"] }}</h1>
+    <h1>{{ item_details["description"] }}</h1>
+    <h1>{{ item_details["genre"] }}</h1>
+    <h1>{{ item_details["image_url"] }}</h1>
+    <h1>{{ item_details["price"] }}</h1>
+    <h1>{{ item_details["big_image_url"] }}</h1>
+</div>
+
+{% endblock %}
