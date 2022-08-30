@@ -27,7 +27,6 @@
                     <li><a href="{{ url_for('main.index') }}">Home</a></li>
 
                     <li><a href="{{ url_for('main.shop') }}">Shop</a></li>
-
                     {% if current_user.is_authenticated %}
                     <li><a href="{{ url_for('main.products') }}">Products</a></li>
                     {% endif %}
