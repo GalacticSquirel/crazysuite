@@ -74,6 +74,10 @@ def productdetails():
 def product_detailscss():
     return send_file("templates//productdetails.css")
 
+@main.route("/signup.css")
+def signupcss():
+    return send_file("templates//signup.css")
+
 @main.route("/productdetails/style.css")
 def product_detailsstylecss():
     return send_file("templates//style.css")
