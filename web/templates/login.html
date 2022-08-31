@@ -6,29 +6,28 @@
 <div vertical-layout id="vertical-layout">
     <form method="POST" action="{{url_for("auth.login")}}" id="fm" >
         <div vertical-layout id="vertical-layout">
-                <h3>Login</h3>
+            <h3>Login</h3>
 
-                    {% with messages = get_flashed_messages() %}
-                        {% if messages %}
-                            <div class="notification">
-                                {{ messages[0] }}
-                            </div>
-                        {% endif %}
-                    {% endwith %}
-                <div id="username">
-                    <label for="username">Username</label>
-                    <input type="email" name="email" placeholder="Email" autofocus="">
-                </div>
-                <div id="password">
-                    <label for="password">Password</label>
-                    <input type="password" name="password" placeholder="Password">
-                </div>
-                <div id="submit">
-                    <button>Log In</button>
-
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <div class="notification">
+                            {{ messages[0] }}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+            <div id="username">
+                <label for="username">Username</label>
+                <input type="email" name="email" placeholder="Email" autofocus="">
+            </div>
+            <div id="password">
+                <label for="password">Password</label>
+                <input type="password" name="password" placeholder="Password">
+            </div>
+            <div id="submit">
+                <button>Log In</button>
+            </div>
         </div>
-
     </form>
-
+    <button>Better visibility</button>
 </div>
 {% endblock %}
