@@ -95,6 +95,10 @@ def stylecss():
 def accountcss():
     return send_file('templates//account.css')
 
+@main.route('/home.css')
+def homecss():
+    return send_file('templates//index.css')
+
 @main.route("/products.css")
 def productscss():
     return send_file("templates//products.css")

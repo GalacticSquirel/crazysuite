@@ -59,6 +59,7 @@ ul{
     display: block;
     padding: 30px;
     color: var(--white);
+    transition: all 0.5s;
 
 }
 

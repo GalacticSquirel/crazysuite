@@ -96,6 +96,10 @@ input#search {
     color: #FFFFFF;
 }
 
+p {
+    color: white;
+}
+
 @media screen and (max-width:400px) {
     .search-area {
         width: 100%;

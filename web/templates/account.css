@@ -1,0 +1,8 @@
+#container{
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+#vertical-layout h1, p{
+    color: white;
+}

@@ -1,11 +1,14 @@
-{% extends "base.html" %}
-
-{% block content %}
-<link rel="stylesheet" href="products.css">
-<div vertical-layout id="vertical-layout">
-    <h1 class="title">
-        Hello, {{ name }}!<a href="something" id="on" class="activate">Activate Product Key</a>
-    </h1>
-    
+{% extends "base.html" %} {% block content %}
+<link rel="stylesheet" href="products.css" />
+<div id="container">
+    <div vertical-layout id="vertical-layout">
+        <h1 class="title">Hello, {{ name }}!</h1>
+        <div id="container-tools">
+            <div class="search-area">
+                <input type="text" id="search" placeholder="Product Key" />
+            </div>
+        </div>
+        <a href="something" id="on" class="activate">Activate Product Key</a>
+    </div>
 </div>
 {% endblock %}
