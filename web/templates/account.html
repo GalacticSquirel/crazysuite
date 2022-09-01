@@ -8,10 +8,43 @@
         <hr>
         <r-c>
             <c1-2 style="float: left; color: white;">
-                s
+                <h1 class="title">Hi</h1>
+                <hr>
             </c1-2>
             <c1-2 style="float: right; color: white;">
-                s
+                <h1 class="title">
+                    Account Tools
+                </h1>
+                <hr>
+                <br>
+                <form method="POST" action="{{url_for("auth.login")}}" id="fm" >
+                    <div vertical-layout id="vertical-layout">
+                        <h3>Password Change</h3>
+            
+                            {% with messages = get_flashed_messages() %}
+                                {% if messages %}
+                                    <div class="notification">
+                                        {{ messages[0] }}
+                                    </div>
+                                {% endif %}
+                            {% endwith %}
+                        <div id="username">
+                            <label for="username">Email</label>
+                            <input type="email" name="email" placeholder="Email" autofocus="">
+                        </div>
+                        <div id="password">
+                            <label for="password">Old Password</label>
+                            <input type="password" name="old-password" placeholder="Password">
+                        </div>
+                        <div id="password">
+                            <label for="password">New Password</label>
+                            <input type="password" name="new-password" placeholder="Password">
+                        </div>
+                        <div id="submit">
+                            <button>Change Password</button>
+                        </div>
+                    </div>
+                </form>
             </c1-2>
         </r-c>
     </div>
