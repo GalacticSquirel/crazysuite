@@ -41,20 +41,7 @@ def shop():
     def add_url(x):
         x["url"] = url_for("main.productdetails", **x)
         return x
-    shop_items = [{"name": "Product 1", "description": "description of product 1 be like","price": "£9.99","genre": "Software",
-                   "image_url": url_for('main.images', image_name='product1'), "big_image_url": url_for('main.images', image_name='product1')},
-                  {"name": "Product 2", "description": "description of product 2 be like something else","price": "£9.90","genre": "Software",
-                   "image_url": url_for('main.images', image_name='product1'), "big_image_url": url_for('main.images', image_name='product1')}, 
-                  {"name": "Product 3", "description": "description of product 3 be like something that isnt product 7","price": "£5.99","genre": "Software",
-                   "image_url": url_for('main.images', image_name='product1'), "big_image_url": url_for('main.images', image_name='product1')},
-                  {"name": "Product 4", "description": "description of product 4 be like something that isnt product 6","price": "£3.99","genre": "Software",
-                   "image_url": url_for('main.images', image_name='product1'), "big_image_url": url_for('main.images', image_name='product1')},
-                  {"name": "Product 5", "description": "description of product 5 be like something that isnt product 5","price": "£6.99","genre": "Software",
-                   "image_url": url_for('main.images', image_name='product1'), "big_image_url": url_for('main.images', image_name='product1')},
-                  {"name": "Product 6", "description": "description of product 6 be like something that isnt product 4","price": "£7.99","genre": "Software",
-                   "image_url": url_for('main.images', image_name='product1'), "big_image_url": url_for('main.images', image_name='product1')},
-                  {"name": "Product 7", "description": "description of product 7 be like something that isnt product 3","price": "£2.99","genre": "Software",
-                   "image_url": url_for('main.images', image_name='product1'), "big_image_url": url_for('main.images', image_name='product1')}]
+    shop_items = json.load(open("static/items.json", "r"))
     with_urls = list(map(lambda x: add_url(x), shop_items))
     return render_template("shop.html", shop_items=with_urls)
 
@@ -91,6 +78,10 @@ def products():
 def logincss():
     return send_file('templates//login.css')
 
+@main.route('/admin.css')
+def consolecss():
+    return send_file('templates//console.css')
+
 @main.route('/style.css')
 def stylecss():
     return send_file('templates//style.css')
@@ -117,6 +108,55 @@ def images(image_name):
         return send_file(f"templates//images//{image_name}.png")
     else:
         return send_file(f"templates//images//place_hold.png")
+
+import os
+
+from werkzeug.utils import secure_filename
+
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+
+def allowed_file(filename):
+    print(f"dd {filename}")
+    return True if filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS else False
+
+@main.route('/admin', methods=['GET', 'POST'])
+def admin():
+    if request.method == 'POST':
+        
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if allowed_file(file.filename):
+            print(file)
+            file.save(f"templates/images/{file.filename}")
+        return redirect(url_for('main.admin'))
+    
+        
+    return render_template("console.html")
+
+@main.route("/admin/add", methods=['GET', 'POST'])
+def add():
+    form = request.form
+    info ={"name": form.get("name"), "description": form.get("description"), "price": form.get("price"), "genre": form.get("genre")}
+    # info = list(map(lambda x: form.get(x), info_names))
+    info["image_url"] = (url_for('main.images', image_name=form.get("image_name")))
+    info["big_image_url"] = (url_for('main.images', image_name=form.get("big_image_name")))
+    
+    with open("static/items.json", "r") as f:
+        curr_items = json.load(f)
+
+    curr_items.append(info)
+    with open("static/items.json", "w") as f:
+        json.dump(curr_items, f)
+    print(info)
+    return redirect(url_for('main.admin'))
+
 
 app = create_app()
 
