@@ -45,6 +45,44 @@
                         </div>
                     </div>
                 </form>
+                <br>
+                <form method="POST" action="{{url_for("auth.login")}}" id="fm" >
+                    <div vertical-layout id="vertical-layout" style="height:fit-content">
+                        <br>
+                        <h3>Account Deactivication</h3>
+                        <p style="text-align: left;">
+                            <br>
+                            To cancel a deativication, log in.
+                            <br>
+                            After 7 days your account will be deavtiated and
+                            <br>
+                            you will loose access to any products you have
+                            <br>
+                            bought. You will not be refunded for any active
+                            <br>
+                            products.
+                        </p>
+                            {% with messages = get_flashed_messages() %}
+                                {% if messages %}
+                                    <div class="notification">
+                                        {{ messages[0] }}
+                                    </div>
+                                {% endif %}
+                            {% endwith %}
+                        <div id="password">
+                            <label for="password">Password</label>
+                            <input type="password" name="password" placeholder="Password">
+                        </div>
+                        <div id="password">
+                            <label for="password">Confirm Password</label>
+                            <input type="password" name="confirm-password" placeholder="Password">
+                        </div>
+                        <div id="submit">
+                            <button>Deactivate Account</button>
+                        </div>
+                        <br>
+                    </div>
+                </form>
             </c1-2>
         </r-c>
     </div>
