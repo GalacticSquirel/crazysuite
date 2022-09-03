@@ -70,7 +70,7 @@ def product_detailsstylecss():
     return send_file("templates//style.css")
 
 @main.route("/products")
-@login_required  
+@login_required
 def products():
     return render_template('products.html', name=current_user.name)
 
