@@ -9,7 +9,8 @@
 }
 #container a {
     text-decoration: none;
-    color: black;
+    color: white;
+    font-weight: bold;
     transition: all 0.2s;
 }
 #container a:hover {
