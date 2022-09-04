@@ -120,6 +120,7 @@ def allowed_file(filename):
     return True if filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS else False
 
 @main.route('/admin', methods=['GET', 'POST'])
+@login_required
 def admin():
     if request.method == 'POST':
         
