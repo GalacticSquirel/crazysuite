@@ -68,3 +68,46 @@ button:hover{
     color:#000000;
     background-color:#FFFFFF;
 }
+
+.activate-key-div {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    min-height: 50px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #727272;
+    color: white;
+    text-align: center;
+}
+.activate{
+    display:inline-block;
+    padding:0.35em 1.2em;
+    border: 1px solid #FFFFFF;
+    margin: 10px;
+    border-radius:0.12em;
+    box-sizing: border-box;
+    text-decoration:none;
+    width: calc(100% - 90px);
+    font-weight:300;
+    color:#FFFFFF;
+    text-align:center;
+    transition: all 0.2s;
+}
+.activate:hover {
+    color:#000000;
+    background-color:#FFFFFF;
+}
+.product-key-form {
+    height: inherit;
+    background-color: inherit;
+    width: inherit;
+    margin: inherit;
+    border-radius: inherit;
+    border: inherit;
+    padding: inherit;
+    justify-content: inherit;
+    align-items: inherit;
+    display: inherit;
+}

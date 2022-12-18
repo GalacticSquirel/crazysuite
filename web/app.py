@@ -69,11 +69,6 @@ def signupcss():
 def product_detailsstylecss():
     return send_file("templates//style.css")
 
-@main.route("/products")
-@login_required
-def products():
-    return render_template('products.html', name=current_user.name)
-
 @main.route('/login.css')
 def logincss():
     return send_file('templates//login.css')
@@ -93,10 +88,6 @@ def accountcss():
 @main.route('/home.css')
 def homecss():
     return send_file('templates//index.css')
-
-@main.route("/products.css")
-def productscss():
-    return send_file("templates//products.css")
 
 @main.route("/shop.css")
 def shopcss():
