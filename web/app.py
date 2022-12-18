@@ -99,7 +99,6 @@ def images(image_name):
     if str(image_name) +".png" in os.listdir("templates//images"):
         return send_file(f"templates//images//{image_name}.png")
     else:
-import os
         return send_file(f"templates//images//place_holder.png")
 
 from werkzeug.utils import secure_filename
