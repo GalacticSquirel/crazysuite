@@ -6,17 +6,47 @@
     <div vertical-layout id="vertical-layout">
         <h1 class="title">Hello, {{ name }}!</h1>
         <hr>
-        <r-c>
-            <c1-2 style="float: left; color: white;">
-                <h1 class="title">Hi</h1>
-                <hr>
+        <div class="owned-items">
+            <p class="owned-items-title">Owned Products:</p>
+        </div>
+        <hr>
+        <r-c id="account-settings">
+            <c1-2 style="float: left;">
+                <form method="POST" action="{{url_for("auth.login")}}" id="fm" style="height: 550px">
+                    <div vertical-layout id="vertical-layout">
+                        <h3>Account Deactivication</h3>
+                        <p style="text-align: left;">
+                            <br>
+                            To cancel a deativication, log in.
+                            <br>
+                            After 7 days your account will be deavtiated and
+                            <br>
+                            you will loose access to any products you have bought.
+                            <br>
+                            You will not be refunded for any active products.
+                        </p>
+                            {% with messages = get_flashed_messages() %}
+                                {% if messages %}
+                                    <div class="notification">
+                                        {{ messages[0] }}
+                                    </div>
+                                {% endif %}
+                            {% endwith %}
+                        <div id="password">
+                            <label for="password">Password</label>
+                            <input type="password" name="password" placeholder="Password">
+                        </div>
+                        <div id="password">
+                            <label for="password">Confirm Password</label>
+                            <input type="password" name="confirm-password" placeholder="Password">
+                        </div>
+                        <div id="submit">
+                            <button>Deactivate Account</button>
+                        </div>
+                    </div>
+                </form>
             </c1-2>
-            <c1-2 style="float: right; color: white;">
-                <h1 class="title">
-                    Account Tools
-                </h1>
-                <hr>
-                <br>
+            <c1-2 style="float: right;">
                 <form method="POST" action="{{url_for("auth.login")}}" id="fm" >
                     <div vertical-layout id="vertical-layout">
                         <h3>Password Change</h3>
@@ -45,45 +75,31 @@
                         </div>
                     </div>
                 </form>
-                <br>
-                <form method="POST" action="{{url_for("auth.login")}}" id="fm" style="height: 550px">
-                    <div vertical-layout id="vertical-layout">
-                        <h3>Account Deactivication</h3>
-                        <p style="text-align: left;">
-                            <br>
-                            To cancel a deativication, log in.
-                            <br>
-                            After 7 days your account will be deavtiated and
-                            <br>
-                            you will loose access to any products you have
-                            <br>
-                            bought. You will not be refunded for any active
-                            <br>
-                            products.
-                        </p>
-                            {% with messages = get_flashed_messages() %}
-                                {% if messages %}
-                                    <div class="notification">
-                                        {{ messages[0] }}
-                                    </div>
-                                {% endif %}
-                            {% endwith %}
-                        <div id="password">
-                            <label for="password">Password</label>
-                            <input type="password" name="password" placeholder="Password">
-                        </div>
-                        <div id="password">
-                            <label for="password">Confirm Password</label>
-                            <input type="password" name="confirm-password" placeholder="Password">
-                        </div>
-                        <div id="submit">
-                            <button>Deactivate Account</button>
-                        </div>
-                    </div>
-                </form>
             </c1-2>
         </r-c>
     </div>
 </div>
+
+<div class="activate-key-div">
+    <form class="product-key-form" method="POST" action="{{url_for("auth.login")}}">
+        <div id="container-tools">
+            <div class="search-area" style="width: calc(100% - 75px); margin: 20px; margin-top: 5px;">
+                <input type="text" id="search" placeholder="Product Key" />
+            </div>
+        </div>
+        <a href="something" id="on" class="activate">Activate Product Key</a>
+    </form>
+</div>
+
+<script>
+    if (name == "CSuiteAdmin") {
+        document.getElementById("account-settings").style.visibility = "hidden";
+    } else {
+        document.getElementById("account-settings").style.visibility = "visible";
+    }
+</script>
+<script>
+    document.getElementById("account-settings").style.marginBottom = calc((document.getElementById("activate-key-div").style.height) + 100);
+</script>
 
 {% endblock %}
