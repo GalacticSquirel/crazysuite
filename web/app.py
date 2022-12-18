@@ -50,6 +50,7 @@ def productdetails():
 
     item_details = {"name": request.args.get('name', default = 1, type = str),
                     "description": request.args.get('description', default = 1, type = str),
+                    "full_description": request.args.get('full_description', default = 1, type = str),
                     "genre": request.args.get('genre', default = 1, type = str),
                     "image_url": request.args.get('image_url', default = 1, type = str),
                     "price": request.args.get('price', default = 1, type = str),
@@ -98,9 +99,8 @@ def images(image_name):
     if str(image_name) +".png" in os.listdir("templates//images"):
         return send_file(f"templates//images//{image_name}.png")
     else:
-        return send_file(f"templates//images//place_hold.png")
-
 import os
+        return send_file(f"templates//images//place_holder.png")
 
 from werkzeug.utils import secure_filename
 
@@ -135,7 +135,7 @@ def admin():
 @main.route("/admin/add", methods=['GET', 'POST'])
 def add():
     form = request.form
-    info ={"name": form.get("name"), "description": form.get("description"), "price": form.get("price"), "genre": form.get("genre")}
+    info ={"name": form.get("name"), "description": form.get("description"), "full_description": form.get("full_description"), "price": form.get("price"), "genre": form.get("genre")}
     # info = list(map(lambda x: form.get(x), info_names))
     info["image_url"] = (url_for('main.images', image_name=form.get("image_name")))
     info["big_image_url"] = (url_for('main.images', image_name=form.get("big_image_name")))

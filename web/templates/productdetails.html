@@ -1,12 +1,23 @@
 {% extends "base.html" %} {% block content %}
 <link rel="stylesheet" href="productdetails.css">
-<div vertical-layout id="container">
-    <h1>{{ item_details["name"] }}</h1>
-    <h1>{{ item_details["description"] }}</h1>
-    <h1>{{ item_details["genre"] }}</h1>
-    <h1>{{ item_details["image_url"] }}</h1>
-    <h1>{{ item_details["price"] }}</h1>
-    <h1>{{ item_details["big_image_url"] }}</h1>
+<div vertical-layout class="container">
+        <div class="top-details">
+            <div style="display:inline-block; vertical-align:bottom;">
+                <img class="icon" src="{{ item_details["image_url"] }}">
+            </div>
+            <div style="display:inline-block;">
+                <span class="title">{{ item_details["name"] }}</span>
+                <br>
+                <span class="genre">{{ item_details["genre"] }}</span>
+                <br>
+                <span class="price">£{{ item_details["price"] }}</span>
+            </div>
+            <br>
+            <br>
+        </div>
+        <br>
+        <div class="description">
+            <p>{{ item_details["full_description"] }}</p>
+        </div>
 </div>
-
 {% endblock %}

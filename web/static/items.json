@@ -1,75 +1,21 @@
 [
     {
-        "name": "Product 1",
-        "description": "description of product 1 be like",
-        "price": "9.99",
+        "name": "CMail",
+        "description": "An easily deployable, secure internal mail system",
+        "full_description": "CMail is an easily deployable, secure internal mail system generally aimed at small businesses.",
+        "price": "25.00",
         "genre": "Software",
-        "image_url": "/images/product1",
-        "big_image_url": "/images/product1"
+        "image_url": "/images/CMail_Description",
+        "big_image_url": "/images/CMail_Large"
     },
 
     {
-        "name": "Product 2",
-        "description": "description of product 2 be like something else",
-        "price": "9.90",
+        "name": "Zipping Tool",
+        "description": "A tool for zipping files and creating zipping automations",
+        "full_description": "A tool for zipping files and creating zipping automations.",
+        "price": "4.00",
         "genre": "Software",
-        "image_url": "/images/product1",
-        "big_image_url": "/images/product1"
-    },
-    {
-        "name": "Product 3",
-        "description": "description of product 3 be like something that isnt product 7",
-        "price": "5.99",
-        "genre": "Software",
-        "image_url": "/images/product1",
-        "big_image_url": "/images/product1"
-    },
-    {
-        "name": "Product 4",
-        "description": "description of product 4 be like something that isnt product 6",
-        "price": "3.99",
-        "genre": "Software",
-        "image_url": "/images/product1",
-        "big_image_url": "/images/product1"
-    },
-    {
-        "name": "Product 5",
-        "description": "description of product 5 be like something that isnt product 5",
-        "price": "6.99",
-        "genre": "Software",
-        "image_url": "/images/product1",
-        "big_image_url": "/images/product1"
-    },
-    {
-        "name": "Product 6",
-        "description": "description of product 6 be like something that isnt product 4",
-        "price": "7.99",
-        "genre": "Software",
-        "image_url": "/images/product1",
-        "big_image_url": "/images/product1"
-    },
-    {
-        "name": "Product 7",
-        "description": "description of product 7 be like something that isnt product 3",
-        "price": "2.99",
-        "genre": "Software",
-        "image_url": "/images/product1",
-        "big_image_url": "/images/product1"
-    },
-    {
-        "name": "product 8",
-        "description": "this was added by console",
-        "price": "9.77",
-        "genre": "software",
-        "image_url": "/images/product1",
-        "big_image_url": "/images/product1"
-    },
-    {
-        "name": "Test",
-        "description": "Testing",
-        "price": "9.30",
-        "genre": "Software",
-        "image_url": "/images/product1",
-        "big_image_url": "/images/product1"
+        "image_url": "/images/Zipping_Tool_Large",
+        "big_image_url": "/images/Zipping_Tool_Large"
     }
 ]

@@ -38,4 +38,43 @@ body {
     background-color: #4fc08d;
     color: #ffffff;
 }
-<link rel="stylesheet" href="productdetails.css" />
+
+.title {
+    color: #ffffff;
+    font-size: 75px;
+}
+
+.icon {
+    min-width: 300px;
+    min-height: 300px;
+    float: right;
+    border-right-style: solid;
+    border-right-color: white;
+    border-right-width: 4px;
+    margin-right: 20px;
+}
+
+.genre {
+    color: #c5c3c3;
+    font-size: 30px;
+    font-weight: bolder;
+}
+
+.price {
+    color: #eeeeee;
+    font-size: 25px;
+    font-weight: bolder;
+}
+
+.top-details {
+    border-bottom-style: solid;
+    border-bottom-color: white;
+    border-bottom-width: 4px;
+}
+
+.description {
+    color: #eeeeee;
+    font-size: large;
+    margin-left: 40px;
+    max-width: 50vw;
+}
