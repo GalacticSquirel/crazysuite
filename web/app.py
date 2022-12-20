@@ -46,7 +46,7 @@ def shop():
     return render_template("shop.html", shop_items=with_urls)
 
 
-@main.route('/shop/<str:item_name>')
+@main.route('/shop/<string:item_name>')
 def productdetails(item_name):
     shop_items = json.load(open("static/items.json", "r"))
     addresses = []
