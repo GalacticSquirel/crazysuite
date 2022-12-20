@@ -48,13 +48,13 @@ def shop():
 @main.route("/productdetails/")
 def productdetails():
 
-    item_details = {"name": request.args.get('name', default = 1, type = str),
-                    "description": request.args.get('description', default = 1, type = str),
-                    "full_description": request.args.get('full_description', default = 1, type = str),
-                    "genre": request.args.get('genre', default = 1, type = str),
-                    "image_url": request.args.get('image_url', default = 1, type = str),
-                    "price": request.args.get('price', default = 1, type = str),
-                    "big_image_url": request.args.get('big_image_url', default = 1, type = str)}
+    item_details = {"name": request.args.get('name', default = "Name", type = str),
+                    "description": request.args.get('description', default = "Description", type = str),
+                    "full_description": request.args.get('full_description', default = "Description", type = str),
+                    "genre": request.args.get('genre', default = "Genre", type = str),
+                    "image_url": request.args.get('image_url', default = "Image", type = str),
+                    "price": request.args.get('price', default = "Price", type = str),
+                    "big_image_url": request.args.get('big_image_url', default = "Image", type = str)}
 
     return render_template("productdetails.html", item_details=item_details)
 
