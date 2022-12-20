@@ -46,12 +46,13 @@ def shop():
 addresses = []
 shop_items = json.load(open("static/items.json", "r"))
 for item in shop_items:
-    addresses.append(item["name"])
+    addresses.append(item["page_name"])
 
 @main.route('/shop/<string:item_name>')
 def productdetails(item_name):
     index = addresses.index(item_name)
     item_details = {"name": shop_items[index]["name"],
+                    "page_name": shop_items[index]["page_name"],
                     "description": shop_items[index]["description"],
                     "full_description": shop_items[index]["full_description"],
                     "genre": shop_items[index]["genre"],
@@ -136,7 +137,7 @@ def admin():
 @main.route("/admin/add", methods=['GET', 'POST'])
 def add():
     form = request.form
-    info ={"name": form.get("name"), "description": form.get("description"), "full_description": form.get("full_description"), "price": form.get("price"), "genre": form.get("genre")}
+    info ={"name": form.get("name"), "page_name": form.get("page_name"), "description": form.get("description"), "full_description": form.get("full_description"), "price": form.get("price"), "genre": form.get("genre")}
     # info = list(map(lambda x: form.get(x), info_names))
     info["image_url"] = (url_for('main.images', image_name=form.get("image_name")))
     info["big_image_url"] = (url_for('main.images', image_name=form.get("big_image_name")))

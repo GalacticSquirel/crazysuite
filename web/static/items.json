@@ -1,6 +1,7 @@
 [
     {
         "name": "CMail",
+        "page_name": "CMail",
         "description": "An easily deployable, secure internal mail system",
         "full_description": "CMail is an easily deployable, secure internal mail system generally aimed at small businesses.",
         "price": "25.00",
@@ -11,6 +12,7 @@
 
     {
         "name": "Zipping Tool",
+        "page_name": "Zipping-Tool",
         "description": "A tool for zipping files and creating zipping automations",
         "full_description": "A tool for zipping files and creating zipping automations.",
         "price": "4.00",
