@@ -45,17 +45,21 @@ def shop():
     with_urls = list(map(lambda x: add_url(x), shop_items))
     return render_template("shop.html", shop_items=with_urls)
 
-@main.route("/productdetails/")
-def productdetails():
 
-    item_details = {"name": request.args.get('name', default = "Name", type = str),
-                    "description": request.args.get('description', default = "Description", type = str),
-                    "full_description": request.args.get('full_description', default = "Description", type = str),
-                    "genre": request.args.get('genre', default = "Genre", type = str),
-                    "image_url": request.args.get('image_url', default = "Image", type = str),
-                    "price": request.args.get('price', default = "Price", type = str),
-                    "big_image_url": request.args.get('big_image_url', default = "Image", type = str)}
-
+@main.route('/shop/<str:item_name>')
+def productdetails(item_name):
+    shop_items = json.load(open("static/items.json", "r"))
+    addresses = []
+    for item in shop_items:
+        addresses.append(item["name"])
+    index = addresses.index(item_name)
+    item_details = {"name": shop_items[index]["name"],
+                    "description": shop_items[index]["description"],
+                    "full_description": shop_items[index]["full_description"],
+                    "genre": shop_items[index]["genre"],
+                    "image_url": shop_items[index]["image_url"],
+                    "price": shop_items[index]["price"],
+                    "big_image_url": shop_items[index]["big_image_url"]}
     return render_template("productdetails.html", item_details=item_details)
 
 @main.route("/productdetails/productdetails.css")
