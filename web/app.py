@@ -38,20 +38,18 @@ def account():
 
 @main.route('/shop')
 def shop():
-    def add_url(x):
-        x["url"] = url_for("main.productdetails", **x)
-        return x
     shop_items = json.load(open("static/items.json", "r"))
-    with_urls = list(map(lambda x: add_url(x), shop_items))
+    with_urls = list(shop_items)
     return render_template("shop.html", shop_items=with_urls)
 
 
+addresses = []
+shop_items = json.load(open("static/items.json", "r"))
+for item in shop_items:
+    addresses.append(item["name"])
+
 @main.route('/shop/<string:item_name>')
 def productdetails(item_name):
-    shop_items = json.load(open("static/items.json", "r"))
-    addresses = []
-    for item in shop_items:
-        addresses.append(item["name"])
     index = addresses.index(item_name)
     item_details = {"name": shop_items[index]["name"],
                     "description": shop_items[index]["description"],
