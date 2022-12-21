@@ -9,6 +9,7 @@ from git.repo import Repo
 # import win32con
 import threading
 import os
+
 main = Blueprint('main', __name__)
 
 @main.route('/update_server', methods=['POST'])
@@ -145,6 +146,7 @@ def admin():
     return render_template("console.html")
 
 @main.route("/admin/add", methods=['GET', 'POST'])
+@login_required
 def add():
     form = request.form
     info ={"name": form.get("name"), "page_name": form.get("page_name"), "description": form.get("description"), "full_description": form.get("full_description"), "price": form.get("price"), "genre": form.get("genre")}
