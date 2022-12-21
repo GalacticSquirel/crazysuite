@@ -38,37 +38,50 @@ def account():
 
 @main.route('/shop')
 def shop():
-    def add_url(x):
-        x["url"] = url_for("main.productdetails", **x)
-        return x
     shop_items = json.load(open("static/items.json", "r"))
-    with_urls = list(map(lambda x: add_url(x), shop_items))
+    with_urls = list(shop_items)
     return render_template("shop.html", shop_items=with_urls)
 
-@main.route("/productdetails/")
-def productdetails():
-
-    item_details = {"name": request.args.get('name', default = "Name", type = str),
-                    "description": request.args.get('description', default = "Description", type = str),
-                    "full_description": request.args.get('full_description', default = "Description", type = str),
-                    "genre": request.args.get('genre', default = "Genre", type = str),
-                    "image_url": request.args.get('image_url', default = "Image", type = str),
-                    "price": request.args.get('price', default = "Price", type = str),
-                    "big_image_url": request.args.get('big_image_url', default = "Image", type = str)}
-
+@main.route('/shop/<string:item_name>')
+def productdetails(item_name):
+    addresses = []
+    shop_items = json.load(open("static/items.json", "r"))
+    for item in shop_items:
+        addresses.append(item["page_name"])
+    
+    try:
+        index = addresses.index(item_name)
+    except ValueError:
+        item_details = {"name": "Name",
+                    "page_name": "",
+                    "description": "",
+                    "full_description": "Description",
+                    "genre": "Genre",
+                    "image_url": "/images/place_holder",
+                    "price": "Price",
+                    "big_image_url": "/images/place_holder"}
+        return render_template("productdetails.html", item_details=item_details)
+    item_details = {"name": shop_items[index]["name"],
+                    "page_name": shop_items[index]["page_name"],
+                    "description": shop_items[index]["description"],
+                    "full_description": shop_items[index]["full_description"],
+                    "genre": shop_items[index]["genre"],
+                    "image_url": shop_items[index]["image_url"],
+                    "price": shop_items[index]["price"],
+                    "big_image_url": shop_items[index]["big_image_url"]}
     return render_template("productdetails.html", item_details=item_details)
 
-@main.route("/productdetails/productdetails.css")
+@main.route("/shop/productdetails.css")
 def product_detailscss():
     return send_file("templates//productdetails.css")
+
+@main.route('/shop/style.css')
+def product_detailsstylecss():
+    return send_file('templates//style.css')
 
 @main.route("/signup.css")
 def signupcss():
     return send_file("templates//signup.css")
-
-@main.route("/productdetails/style.css")
-def product_detailsstylecss():
-    return send_file("templates//style.css")
 
 @main.route('/login.css')
 def logincss():
@@ -134,7 +147,7 @@ def admin():
 @main.route("/admin/add", methods=['GET', 'POST'])
 def add():
     form = request.form
-    info ={"name": form.get("name"), "description": form.get("description"), "full_description": form.get("full_description"), "price": form.get("price"), "genre": form.get("genre")}
+    info ={"name": form.get("name"), "page_name": form.get("page_name"), "description": form.get("description"), "full_description": form.get("full_description"), "price": form.get("price"), "genre": form.get("genre")}
     # info = list(map(lambda x: form.get(x), info_names))
     info["image_url"] = (url_for('main.images', image_name=form.get("image_name")))
     info["big_image_url"] = (url_for('main.images', image_name=form.get("big_image_name")))

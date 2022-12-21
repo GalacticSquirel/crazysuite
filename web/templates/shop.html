@@ -29,7 +29,7 @@
             <div class="products products-table">
                 {% for item in shop_items %}
 
-                <div class="product" onclick="location.href='{{ item["url"] }}';">
+                <div class="product" onclick="window.location.href = window.location + '/{{ item["page_name"] }}';">
                     <div class="product-img">
                         <img src="{{ item['big_image_url'] }}">
                     </div>
