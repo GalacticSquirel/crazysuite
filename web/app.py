@@ -42,15 +42,25 @@ def shop():
     with_urls = list(shop_items)
     return render_template("shop.html", shop_items=with_urls)
 
-
-addresses = []
-shop_items = json.load(open("static/items.json", "r"))
-for item in shop_items:
-    addresses.append(item["page_name"])
-
 @main.route('/shop/<string:item_name>')
 def productdetails(item_name):
-    index = addresses.index(item_name)
+    addresses = []
+    shop_items = json.load(open("static/items.json", "r"))
+    for item in shop_items:
+        addresses.append(item["page_name"])
+    
+    try:
+        index = addresses.index(item_name)
+    except ValueError:
+        item_details = {"name": "Name",
+                    "page_name": "",
+                    "description": "",
+                    "full_description": "Description",
+                    "genre": "Genre",
+                    "image_url": "/images/place_holder",
+                    "price": "Price",
+                    "big_image_url": "/images/place_holder"}
+        return render_template("productdetails.html", item_details=item_details)
     item_details = {"name": shop_items[index]["name"],
                     "page_name": shop_items[index]["page_name"],
                     "description": shop_items[index]["description"],
@@ -61,17 +71,17 @@ def productdetails(item_name):
                     "big_image_url": shop_items[index]["big_image_url"]}
     return render_template("productdetails.html", item_details=item_details)
 
-@main.route("/productdetails/productdetails.css")
+@main.route("/shop/productdetails.css")
 def product_detailscss():
     return send_file("templates//productdetails.css")
+
+@main.route('/shop/style.css')
+def product_detailsstylecss():
+    return send_file('templates//style.css')
 
 @main.route("/signup.css")
 def signupcss():
     return send_file("templates//signup.css")
-
-@main.route("/productdetails/style.css")
-def product_detailsstylecss():
-    return send_file("templates//style.css")
 
 @main.route('/login.css')
 def logincss():
