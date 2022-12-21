@@ -50,7 +50,7 @@ def signup(): # define the sign up function
         if name == "" :
             flash("Invalid Name, you must have one")
             return redirect(url_for('auth.signup'))
-        if 4 < len(name):
+        if len(name) < 4:
             print(len(name))
             flash("Invalid Name, must be at least 4 characters")
             return redirect(url_for('auth.signup'))
