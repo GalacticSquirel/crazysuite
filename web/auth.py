@@ -24,7 +24,7 @@ def login(): # define login page fucntion
         if not user:
             flash('Please sign up before!')
             return redirect(url_for('auth.signup'))
-        elif not check_password_hash(user.password, password):
+        elif not check_password_hash(user.password, str(password)):
             flash('Please check your login details and try again.')
             return redirect(url_for('auth.login')) # if the user doesn't exist or password is wrong, reload the page
         # if the above check passes, then we know the user has the right credentials
@@ -50,12 +50,11 @@ def signup(): # define the sign up function
         if name == "" :
             flash("Invalid Name, you must have one")
             return redirect(url_for('auth.signup'))
-        if len(name) < 4:
-            print(len(name))
+        if len(list(str(name))) < 4:
             flash("Invalid Name, must be at least 4 characters")
             return redirect(url_for('auth.signup'))
         l, u, p, d = 0, 0, 0, 0
-        special = [" ","!",'"',"#","$","%","&","'","(",")","*","+",",","-",".","/",":",";","<","=",">","?","@","[","]","^","_","`","{","|","}","~"]
+        special = ["!",'"',"#","$","%","&","'","(",")","*","+",",","-",".","/",":",";","<","=",">","?","@","[","]","^","_","`","{","|","}","~"]
         s = str(password)
         if s == "":
             flash("Invalid Password, you must have one")
@@ -83,15 +82,15 @@ def signup(): # define the sign up function
             flash('Email address already exists')
             return redirect(url_for('auth.signup'))
         # create a new user with the form data. Hash the password so the plaintext version isn't saved.
-        new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256')) #
+        new_user = User(email=email, name=name, password=generate_password_hash(str(password), method='sha256')) #
         # add the new user to the database
         db.session.add(new_user)
         db.session.commit()
         return redirect(url_for('auth.login'))
 
-@auth.route('/logout') # define logout path
+@auth.route('/logout')
 @login_required
-def logout(): #define the logout function
+def logout():
     logout_user()
     return redirect(url_for('main.index'))
 

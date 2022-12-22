@@ -126,43 +126,45 @@ def allowed_file(filename):
 @main.route('/admin', methods=['GET', 'POST'])
 @login_required
 def admin():
-    if request.method == 'POST':
-        
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
-        
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if allowed_file(file.filename):
-            print(file)
-            file.save(f"templates/images/{file.filename}")
-        return redirect(url_for('main.admin'))
+    if current_user.id in [1,2]:
+        if request.method == 'POST':
+            if 'file' not in request.files:
+                flash('No file part')
+                return redirect(request.url)
+            file = request.files['file']
+            
+            if file.filename == '':
+                flash('No selected file')
+                return redirect(request.url)
+            if allowed_file(file.filename):
+                print(file)
+                file.save(f"templates/images/{file.filename}")
+            return redirect(url_for('main.admin'))
+        return render_template("console.html")
+    else:
+        return redirect(url_for('auth.login'))
     
-        
-    return render_template("console.html")
-
+    
 @main.route("/admin/add", methods=['GET', 'POST'])
 @login_required
 def add():
-    form = request.form
-    info ={"name": form.get("name"), "page_name": form.get("page_name"), "description": form.get("description"), "full_description": form.get("full_description"), "price": form.get("price"), "genre": form.get("genre")}
-    # info = list(map(lambda x: form.get(x), info_names))
-    info["image_url"] = (url_for('main.images', image_name=form.get("image_name")))
-    info["big_image_url"] = (url_for('main.images', image_name=form.get("big_image_name")))
-    
-    with open("static/items.json", "r") as f:
-        curr_items = json.load(f)
+    if current_user.id in [1,2]:
+        form = request.form
+        info ={"name": form.get("name"), "page_name": form.get("page_name"), "description": form.get("description"), "full_description": form.get("full_description"), "price": form.get("price"), "genre": form.get("genre")}
+        # info = list(map(lambda x: form.get(x), info_names))
+        info["image_url"] = (url_for('main.images', image_name=form.get("image_name")))
+        info["big_image_url"] = (url_for('main.images', image_name=form.get("big_image_name")))
+        
+        with open("static/items.json", "r") as f:
+            curr_items = json.load(f)
 
-    curr_items.append(info)
-    with open("static/items.json", "w") as f:
-        json.dump(curr_items, f)
-    print(info)
-    return redirect(url_for('main.admin'))
-
+        curr_items.append(info)
+        with open("static/items.json", "w") as f:
+            json.dump(curr_items, f)
+        print(info)
+        return redirect(url_for('main.admin'))
+    else:
+        return redirect(url_for('auth.login'))
 
 app = create_app()
 
