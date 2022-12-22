@@ -142,7 +142,7 @@ def admin():
             return redirect(url_for('main.admin'))
         return render_template("console.html")
     else:
-        return redirect(url_for('auth.login'))
+        return redirect("/")
     
     
 @main.route("/admin/add", methods=['GET', 'POST'])
@@ -164,7 +164,7 @@ def add():
         print(info)
         return redirect(url_for('main.admin'))
     else:
-        return redirect(url_for('auth.login'))
+        return redirect("/")
 
 app = create_app()
 
