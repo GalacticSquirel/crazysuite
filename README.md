@@ -9,3 +9,4 @@ TODO List:
 | :four: | :x: | download buttons for owned products|
 | | :white_check_mark: |  securing admin page |
 | :two: | :x: | add a way to purchase products + generate product keys + distribute product keys |
+| | :x: | block signup and login pages if you are signed in |
