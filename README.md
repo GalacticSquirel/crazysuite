@@ -4,7 +4,7 @@ TODO List:
 
 |   Priority    |  Status         | Description |
 | ----------- | -----------       | ----------- |
-| :one:     | :white_check_mark:  | account page product key floating |
+| | :white_check_mark:  | account page product key floating |
 | :two:     | :x:   | owned products list |
 | :one:   | :x:  | API to see if product key is valid (account details, key, mode) (probably /api/stuff)|
 | :three: | :x: | download buttons for owned products|
