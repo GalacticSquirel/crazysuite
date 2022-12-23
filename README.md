@@ -9,7 +9,6 @@ TODO List:
 | :three: | :x: | owned products list |
 | :four: | :x: | download buttons for owned products|
 | :five: | :x: | impliment captcha to activate key |
-| | :x: | block signup and login pages if you are signed in |
 | | :x: | impliment email verification to new accounts |
 | | :x: | impliment deleting accounts |
 | | :white_check_mark: |  securing admin page |
