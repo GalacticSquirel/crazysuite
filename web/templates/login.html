@@ -2,6 +2,7 @@
 
 {% block content %}
 <link rel="stylesheet" href="login.css">
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
 <div vertical-layout id="vertical-layout">
     <form method="POST" action="{{url_for("auth.login")}}" id="fm" >
@@ -24,6 +25,7 @@
                     <label for="password">Password</label>
                     <input type="password" name="password" placeholder="Password">
                 </div>
+                <div class="cf-turnstile" data-sitekey="0x4AAAAAAABti1blkZmNh51p"></div>
                 <div id="submit">
                     <button>Log In</button>
                 </div>
