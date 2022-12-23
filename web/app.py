@@ -82,11 +82,17 @@ def product_detailsstylecss():
 
 @main.route("/signup.css")
 def signupcss():
-    return send_file("templates//signup.css")
+    if not current_user.is_authenticated:
+        return send_file("templates//signup.css")
+    else:
+        return redirect('/')
 
 @main.route('/login.css')
 def logincss():
-    return send_file('templates//login.css')
+    if not current_user.is_authenticated:
+        return send_file('templates//login.css')
+    else:
+        return redirect('/')
 
 @main.route('/admin.css')
 def consolecss():
