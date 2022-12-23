@@ -10,7 +10,6 @@ TODO List:
 | :four: | :x: | download buttons for owned products|
 | :five: | :x: | impliment captcha to activate key |
 | | :x: | block signup and login pages if you are signed in |
-| | :x: | changed password actually change password + include captcha
 | | :x: | impliment email verification to new accounts |
 | | :x: | impliment deleting accounts |
 | | :white_check_mark: |  securing admin page |
