@@ -8,15 +8,12 @@
     <div vertical-layout id="vertical-layout">
         <h1 class="title">Hello, {{ name }}!</h1>
         <hr>
-        <div class="owned-items">
-            <p class="owned-items-title">Owned Products:</p>
-        </div>
-        <hr>
         <select id="form-selector">
             <option value="_" selected>Choose One</option>
             <option value="ChangePass">Change Password</option>
             <option value="AccountDeactivate">Deactivate Account</option>
             <option value="Activate">Activate Product Key</option>
+            <option value="owned">Owned Products</option>
         </select>
         <div id="forms">
             <form name="AccountDeactivate" method="POST" action="{{url_for("auth.login")}}" id="fm" >
@@ -91,16 +88,19 @@
                 <div class="cf-turnstile" data-sitekey="0x4AAAAAAABti1blkZmNh51p"></div>
                 <a href="something" id="on" class="activate">Activate Product Key</a>
             </form>
+            <form name="owned" method="GET" action="{{url_for("main.index")}}">
+                <div class="owned-items">
+                    <p class="owned-items-title">Owned Products:</p>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
 <script>
     const formSelect = document.getElementById('form-selector')
-    ,   myForms    = document.getElementById('forms')
-    ;
+    ,   myForms    = document.getElementById('forms');
     formSelect.oninput=()=>{ myForms.className = `f-${formSelect.value}` }
-
 
     if (name == "CSuiteAdmin") {
         document.getElementById("account-settings").style.visibility = "hidden";
