@@ -11,4 +11,5 @@ TODO List:
 | :five: | :x: | impliment captcha to activate key |
 | | :x: | impliment email verification to new accounts |
 | | :x: | impliment deleting accounts |
+| | :x: | get 404 page to actually show |
 | | :white_check_mark: |  securing admin page |
