@@ -132,10 +132,10 @@ button:hover {
 #forms form {
   display: none;
 }
-#forms.f-ChangePass form[name="AccountDeactivate"],
-#forms.f-AccountDeactivate form[name="ChangePass"],
 #forms.f-owned form[name="owned"],
-#forms.f-Activate form[name="Activate"] {
+#forms.f-Activate form[name="Activate"],
+#forms.f-AccountDeactivate form[name="AccountDeactivate"],
+#forms.f-ChangePass form[name="ChangePass"]{
   display: block;
 }
 

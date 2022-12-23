@@ -8,15 +8,58 @@
     <div vertical-layout id="vertical-layout">
         <h1 class="title">Hello, {{ name }}!</h1>
         <hr>
-        <select id="form-selector">
+        <select id="form-selector" style="margin-bottom: 20px;">
             <option value="_" selected>Choose One</option>
+            <option value="owned">Owned Products</option>
+            <option value="Activate">Activate Product Key</option>
             <option value="ChangePass">Change Password</option>
             <option value="AccountDeactivate">Deactivate Account</option>
-            <option value="Activate">Activate Product Key</option>
-            <option value="owned">Owned Products</option>
         </select>
         <div id="forms">
-            <form name="AccountDeactivate" method="POST" action="{{url_for("auth.login")}}" id="fm" >
+            <form name="owned" method="GET" action="{{url_for("main.index")}}">
+                <div class="owned-items">
+                    <p class="owned-items-title">Owned Products:</p>
+                </div>
+            </form>
+            <form name="Activate" class="product-key-form" method="POST" action="{{url_for("auth.login")}}">
+                <div id="container-tools">
+                    <div class="search-area" style="width: calc(100% - 75px); margin: 20px; margin-top: 5px;">
+                        <input type="text" id="search" placeholder="Product Key" />
+                    </div>
+                </div>
+                <div class="cf-turnstile" data-sitekey="0x4AAAAAAABti1blkZmNh51p"></div>
+                <a href="something" id="on" class="activate">Activate Product Key</a>
+            </form>
+            <form name="ChangePass" method="POST" action="{{url_for("auth.ChangePass")}}" id="fm" style="height: 620px">
+                <div vertical-layout id="vertical-layout">
+                    <h3>Password Change</h3>
+        
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                <div class="notification">
+                                    {{ messages[0] }}
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+                    <div id="username">
+                        <label for="username">Email</label>
+                        <input type="email" name="email" placeholder="Email" autofocus="">
+                    </div>
+                    <div id="password">
+                        <label for="password">Old Password</label>
+                        <input type="password" name="old-password" placeholder="Password">
+                    </div>
+                    <div id="password">
+                        <label for="password">New Password</label>
+                        <input type="password" name="new-password" placeholder="Password">
+                    </div>
+                    <div class="cf-turnstile" style="margin-top: 10px;" data-sitekey="0x4AAAAAAABti1blkZmNh51p"></div>
+                    <div id="submit" style="margin-top: 0;">
+                        <button>Change Password</button>
+                    </div>
+                </div>
+            </form>
+            <form name="AccountDeactivate" method="POST" action="{{url_for("auth.login")}}" id="fm" style="height: 620px">
                 <div vertical-layout id="vertical-layout">
                     <h3>Account Deactivication</h3>
                     <p style="text-align: left;">
@@ -48,49 +91,6 @@
                     <div id="submit">
                         <button>Deactivate Account</button>
                     </div>
-                </div>
-            </form>
-            <form name="ChangePass" method="POST" action="{{url_for("auth.ChangePass")}}" id="fm" style="height: 550px">
-                <div vertical-layout id="vertical-layout">
-                    <h3>Password Change</h3>
-        
-                        {% with messages = get_flashed_messages() %}
-                            {% if messages %}
-                                <div class="notification">
-                                    {{ messages[0] }}
-                                </div>
-                            {% endif %}
-                        {% endwith %}
-                    <div id="username">
-                        <label for="username">Email</label>
-                        <input type="email" name="email" placeholder="Email" autofocus="">
-                    </div>
-                    <div id="password">
-                        <label for="password">Old Password</label>
-                        <input type="password" name="old-password" placeholder="Password">
-                    </div>
-                    <div id="password">
-                        <label for="password">New Password</label>
-                        <input type="password" name="new-password" placeholder="Password">
-                    </div>
-                    <div class="cf-turnstile" data-sitekey="0x4AAAAAAABti1blkZmNh51p"></div>
-                    <div id="submit">
-                        <button>Change Password</button>
-                    </div>
-                </div>
-            </form>
-            <form name="Activate" class="product-key-form" method="POST" action="{{url_for("auth.login")}}">
-                <div id="container-tools">
-                    <div class="search-area" style="width: calc(100% - 75px); margin: 20px; margin-top: 5px;">
-                        <input type="text" id="search" placeholder="Product Key" />
-                    </div>
-                </div>
-                <div class="cf-turnstile" data-sitekey="0x4AAAAAAABti1blkZmNh51p"></div>
-                <a href="something" id="on" class="activate">Activate Product Key</a>
-            </form>
-            <form name="owned" method="GET" action="{{url_for("main.index")}}">
-                <div class="owned-items">
-                    <p class="owned-items-title">Owned Products:</p>
                 </div>
             </form>
         </div>
