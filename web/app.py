@@ -24,6 +24,10 @@ def webhook():
     
 @main.route('/') 
 def index():
+    return redirect('/home')
+
+@main.route('/home')
+def home():
     return render_template('index.html')
 
 @main.route("/favicon.ico")
