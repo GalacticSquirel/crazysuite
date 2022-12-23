@@ -108,6 +108,55 @@ def signup(): # define the sign up function
             flash('Failed Captcha!')
             return redirect(url_for('auth.signup'))
 
+@auth.route('/ChangePass', methods=['POST'])
+@login_required
+def ChangePass():
+    email = str(request.form.get('email'))
+    old_password = str(request.form.get('old-password'))
+    new_password = str(request.form.get('new-password'))
+    verify = request.form.get('cf-turnstile-response')
+    
+    errors = []
+    regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+    if not (re.fullmatch(regex, email)):#check valid email
+        return redirect('/account')
+    l, u, p, d = 0, 0, 0, 0
+    special = ["!",'"',"#","$","%","&","'","(",")","*","+",",","-",".","/",":",";","<","=",">","?","@","[","]","^","_","`","{","|","}","~"]
+    s = str(new_password)
+    if s == "":
+        return redirect('/account')
+    if (len(s) >= 8):
+        for i in s:
+            if (i.islower()):
+                l+=1           
+            if (i.isupper()):
+                u+=1           
+            if (i.isdigit()):
+                d+=1           
+            if i in special:
+                p+=1          
+    if not (l>=1 and u>=1 and p>=1 and d>=1 and l+p+u+d==len(s)):#check new password valid
+        return redirect('/account')
+    
+    ip = str(request.remote_addr)
+
+    if old_password == new_password:#check both passwords entered are the same
+        return redirect('/account')
+
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return redirect('/account')
+
+    if not check_password_hash(user.password, str(old_password)):
+        return redirect('/account')
+
+    if captcha(verify) == True:
+        current_user.password = generate_password_hash(str(new_password), method='sha256')
+        db.session.commit()
+        return redirect('/account')
+    else:
+        return redirect('/account')
+
 @auth.route('/logout')
 @login_required
 def logout():

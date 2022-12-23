@@ -19,7 +19,7 @@
             <option value="Activate">Activate Product Key</option>
         </select>
         <div id="forms">
-            <form name="ChangePass" method="POST" action="{{url_for("auth.login")}}" id="fm" style="height: 550px">
+            <form name="AccountDeactivate" method="POST" action="{{url_for("auth.login")}}" id="fm" >
                 <div vertical-layout id="vertical-layout">
                     <h3>Account Deactivication</h3>
                     <p style="text-align: left;">
@@ -53,7 +53,7 @@
                     </div>
                 </div>
             </form>
-            <form name="AccountDeactivate" method="POST" action="{{url_for("auth.login")}}" id="fm" >
+            <form name="ChangePass" method="POST" action="{{url_for("auth.ChangePass")}}" id="fm" style="height: 550px">
                 <div vertical-layout id="vertical-layout">
                     <h3>Password Change</h3>
         
