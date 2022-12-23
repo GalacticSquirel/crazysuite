@@ -1,0 +1,84 @@
+#vertical-layout{
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+
+
+
+
+#username{
+
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+
+
+form{
+    height: 520px;
+    background-color: rgba(255,255,255,0);
+    width: 100%;
+    margin: auto auto;
+    border-radius: 1px;
+    border: 1px solid rgba(255,255,255,1);
+    padding: 50px 10vw;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+
+}
+@media screen and (max-width: 600px) {
+    form {
+        padding: padding: 50px 100px;
+    }
+}
+form h3{
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 42px;
+    text-align: center;
+    color: white;
+}
+
+label{
+    display: block;
+    margin-top: 30px;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: left;
+    margin-left: 10px;
+    color: white;
+}
+input{
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 100%;
+    height: 47px;
+    padding: 10px;
+    border: 1px solid #FFFFFF;
+    color: #000000;
+    background-color: rgba(0, 0, 0, 0);
+}
+::placeholder{
+    color: white;
+}
+button{
+    margin-top: 50px;
+    margin-left: 10px;
+    width: 100%;
+    background-color: transparent;
+    color: white;
+    padding: 15px 0;
+    font-size: 18px;
+    font-weight: 600;
+    border: 1px solid #FFFFFF;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+button:hover{
+    color:#000000;
+    background-color:#FFFFFF;
+}

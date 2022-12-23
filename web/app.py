@@ -114,6 +114,10 @@ def accountcss():
 def homecss():
     return send_file('templates//index.css')
 
+@main.route('/404.css')
+def error404css():
+    return send_file('templates//404.css')
+
 @main.route("/shop.css")
 def shopcss():
     return send_file("templates//shop.css")
@@ -175,6 +179,10 @@ def add():
         return redirect(url_for('main.admin'))
     else:
         return redirect("/")
+
+@main.errorhandler(404)
+def not_found(e):
+    return render_template("404.html"), 404
 
 app = create_app()
 
