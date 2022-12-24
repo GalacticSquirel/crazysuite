@@ -194,9 +194,7 @@ def add():
         return redirect('/')
 
 
-def handle_not_found(error):
-    print(os.listdir("templates"))
-    
+def handle_not_found(error):    
     return render_template('not_found.html'), 404
 
 @main.route('/test') 
