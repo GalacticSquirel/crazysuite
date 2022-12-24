@@ -196,6 +196,21 @@ def add():
 def handle_not_found(error):    
     return render_template('not_found.html'), 404
 
+@main.route("/api/prices")
+def api_prices():
+    with open("static//items.json", "rb") as f:
+        items = json.load(f)
+    prices = dict()
+    for item in items:
+        prices[item["name"]] = item["price"]
+    with open("static//prices.json", "w") as f:
+        json.dump(prices,f)
+    return send_file("static//prices.json")
+
+@main.route('/test') 
+def errorpage():
+    return render_template('404.html')
+
 app = create_app()
 
 if __name__ == '__main__':
