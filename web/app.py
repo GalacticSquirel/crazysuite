@@ -204,10 +204,6 @@ def api_prices():
         json.dump(prices,f)
     return send_file("static//prices.json")
 
-@main.route('/test') 
-def errorpage():
-    return render_template('404.html')
-
 app = create_app()
 
 if __name__ == '__main__':
