@@ -181,8 +181,12 @@ def add():
         return redirect("/")
 
 @main.errorhandler(404)
-def not_found(e):
     return render_template("404.html"), 404
+def not_found(error):
+
+@main.route('/test') 
+def errorpage():
+    return render_template('404.html')
 
 app = create_app()
 
