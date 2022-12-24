@@ -30,9 +30,9 @@ def index():
 def home():
     return render_template('index.html')
 
-@main.route("/favicon.ico")
+@main.route('/favicon.ico')
 def favicon():
-    return send_file("templates//favicon.ico", mimetype='image/gif')
+    return send_file('templates//favicon.ico', mimetype='image/gif')
 
 @main.route('/account') 
 @login_required
@@ -43,14 +43,14 @@ def account():
 
 @main.route('/shop')
 def shop():
-    shop_items = json.load(open("static/items.json", "r"))
+    shop_items = json.load(open('static/items.json', 'r'))
     with_urls = list(shop_items)
-    return render_template("shop.html", shop_items=with_urls)
+    return render_template('shop.html', shop_items=with_urls)
 
 @main.route('/shop/<string:item_name>')
 def productdetails(item_name):
     addresses = []
-    shop_items = json.load(open("static/items.json", "r"))
+    shop_items = json.load(open('static/items.json', 'r'))
     for item in shop_items:
         addresses.append(item["page_name"])
     
@@ -74,20 +74,20 @@ def productdetails(item_name):
                     "image_url": shop_items[index]["image_url"],
                     "price": shop_items[index]["price"],
                     "big_image_url": shop_items[index]["big_image_url"]}
-    return render_template("productdetails.html", item_details=item_details)
+    return render_template('productdetails.html', item_details=item_details)
 
-@main.route("/shop/productdetails.css")
+@main.route('/shop/productdetails.css')
 def product_detailscss():
-    return send_file("templates//productdetails.css")
+    return send_file('templates//productdetails.css')
 
 @main.route('/shop/style.css')
 def product_detailsstylecss():
     return send_file('templates//style.css')
 
-@main.route("/signup.css")
+@main.route('/signup.css')
 def signupcss():
     if not current_user.is_authenticated:
-        return send_file("templates//signup.css")
+        return send_file('templates//signup.css')
     else:
         return redirect('/')
 
@@ -118,9 +118,9 @@ def homecss():
 def error404css():
     return send_file('templates//404.css')
 
-@main.route("/shop.css")
+@main.route('/shop.css')
 def shopcss():
-    return send_file("templates//shop.css")
+    return send_file('templates//shop.css')
 
 @main.route("/images/<image_name>")
 def images(image_name):
@@ -154,12 +154,12 @@ def admin():
                 print(file)
                 file.save(f"templates/images/{file.filename}")
             return redirect(url_for('main.admin'))
-        return render_template("console.html")
+        return render_template('console.html')
     else:
-        return redirect("/")
+        return redirect('/')
     
     
-@main.route("/admin/add", methods=['GET', 'POST'])
+@main.route('/admin/add', methods=['GET', 'POST'])
 @login_required
 def add():
     if current_user.id in [1,2]:
@@ -169,20 +169,20 @@ def add():
         info["image_url"] = (url_for('main.images', image_name=form.get("image_name")))
         info["big_image_url"] = (url_for('main.images', image_name=form.get("big_image_name")))
         
-        with open("static/items.json", "r") as f:
+        with open('static/items.json', 'r') as f:
             curr_items = json.load(f)
 
         curr_items.append(info)
-        with open("static/items.json", "w") as f:
+        with open('static/items.json', 'w') as f:
             json.dump(curr_items, f)
         print(info)
         return redirect(url_for('main.admin'))
     else:
-        return redirect("/")
+        return redirect('/')
 
 @main.errorhandler(404)
 def not_found(error):
-    return render_template("404.html"), 404
+    return render_template('404.html'), 404
 
 @main.route('/test') 
 def errorpage():
