@@ -18,9 +18,9 @@
             </form>
         </div>
 
-        <form method="POST" action="{{ url_for('main.add')}}" id="regForm">
+        <form method="POST" action="{{ url_for('add')}}" id="regForm">
 
-            <!--{"name": "Product 1", "description": "description of product 1 be like","price": "£9.99","genre": "Software", "image_url": url_for('main.images', image_name='product1'), "big_image_url": url_for('main.images', image_name='product1')} -->
+            <!--{"name": "Product 1", "description": "description of product 1 be like","price": "£9.99","genre": "Software", "image_url": url_for('images', image_name='product1'), "big_image_url": url_for('images', image_name='product1')} -->
             <!-- One "tab" for each step in the form: -->
             <div class="tab">
                 <p><input placeholder="Product Name" name="name" oninput="this.className = ''"></p>

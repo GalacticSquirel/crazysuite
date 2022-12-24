@@ -14,7 +14,7 @@ def create_app():
     db.init_app(app) # Initialiaze sqlite database
     # The login manager contains the code that lets your application and Flask-Login work together
     login_manager = LoginManager() # Create a Login Manager instance
-    login_manager.login_view = 'auth.login' # define the redirection path when login required and we attempt to access without being logged in
+    login_manager.login_view = 'main.login' # define the redirection path when login required and we attempt to access without being logged in
     login_manager.init_app(app) # configure it for login
     from models import User
     @login_manager.user_loader
@@ -23,9 +23,7 @@ def create_app():
         return User.query.get(int(user_id))
     # blueprint for auth routes in our app
     # blueprint allow you to orgnize your flask app
-    from auth import auth as auth_blueprint
-    app.register_blueprint(auth_blueprint)
+    # from auth import auth as auth_blueprint
+    # app.register_blueprint(auth_blueprint)
     # blueprint for non-auth parts of app
-    from app import main as main_blueprint
-    app.register_blueprint(main_blueprint)
     return app
