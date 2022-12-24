@@ -11,8 +11,6 @@ TODO List:
 | :five:   | :x:    | impliment captcha to activate key |
 |          | :x:    | impliment email verification to new accounts |
 |          | :x:    | impliment deleting accounts |
-|          | :x:    | get 404 page to actually show |
 |          | :x:    | cookie popup |
 |          | :warning: | tos page - need to work on |
 |          | :x:    | impliment rate limiting for login / change pass / etc... |
-|          | :x:    | text only site version |
