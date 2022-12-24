@@ -181,8 +181,8 @@ def add():
         return redirect("/")
 
 @main.errorhandler(404)
-    return render_template("404.html"), 404
 def not_found(error):
+    return render_template("404.html"), 404
 
 @main.route('/test') 
 def errorpage():
