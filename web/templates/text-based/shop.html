@@ -1,0 +1,20 @@
+<p>Each key can be used on only once, but you can have multiple copies of the same product on the same account.</p>
+<p>If you require multiple copies then I am sure we can work something out.</p>
+<p>After purchase you will receive an email with your product key(s).</p>
+<p>Please leave up to 24 hours to receive your key(s).</p>
+<p>You have 48 hours after purchase to get a refund.</p>
+<p>You lose your refund once your key has been used.</p>
+<p>You can assign that key to any account by going to that account's account page and selecting activate product key.</p>
+
+{% for item in shop_items %}
+<hr>
+<p>Name: {{ item["name"] }}</p>
+<p>Description: {{ item["description"] }}</p>
+<p>Genre: {{ item["genre"] }}</p>
+<p>Price: £{{ item["price"] }}</p>
+<p><a href="/text/shop/{{ item["page_name"] }}">Link to product page</a></p>
+{% endfor %}
+<hr>
+<p>
+    <a href="/text/home">Back One Step</a> | <a href="/text/home">Home</a>
+</p>

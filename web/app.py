@@ -47,25 +47,26 @@ def shop():
     with_urls = list(shop_items)
     return render_template('shop.html', shop_items=with_urls)
 
+@main.route('/shop/')
+def shop_blank():
+    return render_template('404.html'), 404
+
+@main.route('/shop/404.css')
+def shop_blankcss():
+    return send_file('templates//404.css')
+
 @main.route('/shop/<string:item_name>')
 def productdetails(item_name):
     addresses = []
     shop_items = json.load(open('static/items.json', 'r'))
     for item in shop_items:
         addresses.append(item["page_name"])
-    
+    if item_name not in addresses:
+        return render_template('404.html'), 404
     try:
         index = addresses.index(item_name)
     except ValueError:
-        item_details = {"name": "Name",
-                    "page_name": "",
-                    "description": "",
-                    "full_description": "Description",
-                    "genre": "Genre",
-                    "image_url": "/images/place_holder",
-                    "price": "Price",
-                    "big_image_url": "/images/place_holder"}
-        return render_template("productdetails.html", item_details=item_details)
+        return render_template('404.html'), 404
     item_details = {"name": shop_items[index]["name"],
                     "page_name": shop_items[index]["page_name"],
                     "description": shop_items[index]["description"],
@@ -195,6 +196,46 @@ def add():
         return redirect(url_for('main.admin'))
     else:
         return redirect('/')
+
+#For text based website
+#Should be easier to parse with a web scraper
+
+@main.route('/text/shop/<string:item_name>')
+def text_based_products(item_name):
+    addresses = []
+    shop_items = json.load(open('static/items.json', 'r'))
+    for item in shop_items:
+        addresses.append(item["page_name"])
+    try:
+        index = addresses.index(item_name)
+    except ValueError:
+        return redirect('/text/404')
+    item_details = {"name": shop_items[index]["name"],
+                    "page_name": shop_items[index]["page_name"],
+                    "full_description": shop_items[index]["full_description"],
+                    "genre": shop_items[index]["genre"],
+                    "price": shop_items[index]["price"],}
+    return render_template('text-based/productdetails.html', item_details=item_details)
+
+@main.route('/text/')
+def text_based_index():
+    return redirect('/text/home')
+
+@main.route('/text/<string:page>')
+def text_based(page):
+    if page == "index":
+        return redirect('/text/home')
+    elif page == "home":
+        shop_items = json.load(open('static/items.json', 'r'))
+        with_urls = list(shop_items)
+        return render_template('text-based/index.html', shop_items=with_urls)
+    if page == "shop":
+        shop_items = json.load(open('static/items.json', 'r'))
+        with_urls = list(shop_items)
+        return render_template('text-based/shop.html', shop_items=with_urls)
+    elif page in ['terms', 'About-Us']:
+        return render_template(f'text-based/{page}.html')
+    return render_template('text-based/404.html'), 404
 
 @main.errorhandler(404)
 def not_found(error):

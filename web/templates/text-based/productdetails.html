@@ -1,0 +1,9 @@
+
+<h1>Name: {{ item_details["name"] }}</h1>
+<p>Genre: {{ item_details["genre"] }}</p>
+<p>Price: £{{ item_details["price"] }}</p>
+<p>{{ item_details["full_description"] }}</p>
+<br>
+<p>
+    <a href="/text/shop">Back One Step</a> | <a href="/text/home">Home</a> | <a href="/shop/{{ item_details["path_name"] }}">Return to design</a> | <a href="/home">Return to design homepage</a>
+</p>

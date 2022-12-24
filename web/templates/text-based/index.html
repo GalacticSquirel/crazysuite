@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+    <head>
+        <title>Home</title>
+    </head>
+    <body>
+        <h1>
+            Welcome to CSuite!
+        </h1>
+        <p>
+            CSuite is a collection of programs written by <a class="link" href="https://github.com/Crazyplopl">Crazyplopl</a> and <a class="link" href="https://github.com/GalacticSquirel">GalacticSquirel.</a>
+        </p>
+        <h2>
+            Site Map:
+        </h2>
+        <ul>
+            <li>
+                <a href="/text/">/text/</a>
+            </li>
+            <li>
+                <a href="/text/home">/text/home</a>
+            </li>
+            <li>
+                <a href="/text/shop">/text/shop</a>
+            </li>
+            {% for item in shop_items %}
+            <li>
+                <a href='/text/shop/{{ item["page_name"] }}'>/text/shop/{{ item["page_name"] }}</a>
+            </li>
+            {% endfor %}
+            <li>
+                <a href="/text/terms">/text/terms</a>
+            </li>
+            <li>
+                <a href="/text/About-Us">/text/About-Us</a>
+            </li>
+        </ul>
+        <p>
+            <a href="/home">Return to design</a>
+        </p>
+    </body>
+</html>
