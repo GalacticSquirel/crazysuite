@@ -175,3 +175,26 @@ ul{
     position: absolute;
     z-index: 1;
 }
+
+.site-footer {
+    background-color: var(--black);
+    position: relative;
+    color: var(--white);
+}
+
+.footer-content {
+    text-align: center;
+    color: #f9f9f9;
+    font-weight: bold;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.footer-content a:hover {
+    color: var(--white);
+}
+
+.copyright {
+    font-size: small;
+    font-weight: normal;
+}

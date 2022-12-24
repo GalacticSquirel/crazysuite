@@ -122,7 +122,23 @@ def error404css():
 def shopcss():
     return send_file('templates//shop.css')
 
-@main.route("/images/<image_name>")
+@main.route('/terms')
+def terms():
+    return render_template('terms.html')
+
+@main.route('/terms.css')
+def termscss():
+    return send_file('templates//terms.css')
+
+@main.route('/About-Us')
+def about_us():
+    return render_template('about-us.html')
+
+@main.route('/terms.css')
+def about_uscss():
+    return send_file('templates//about-us.css')
+
+@main.route('/images/<image_name>')
 def images(image_name):
     if str(image_name) +".png" in os.listdir("templates//images"):
         return send_file(f"templates//images//{image_name}.png")
