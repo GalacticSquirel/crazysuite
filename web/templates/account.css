@@ -50,14 +50,24 @@ input {
   border: 1px solid #ffffff;
   color: #000000;
   background-color: rgba(0, 0, 0, 0);
+  text-color: #000000;
 }
 
 ::placeholder {
   color: white;
 }
+input, select, textarea{
+  color: white;
+}
+
+textarea:focus, input:focus {
+  color: white;
+  outline: none !important;
+}
+
 
 button {
-  margin-top: 50px;
+  margin-top: 15px;
   margin-left: 10px;
   width: 100%;
   background-color: transparent;
@@ -139,3 +149,21 @@ button:hover {
   display: block;
 }
 
+select {
+  border: 1px solid #fff;
+  background-color: transparent;
+  width: 40%;
+  height: 30px;
+}
+select option{
+  background-color: blue;
+  }
+
+select:focus {
+  color: white;
+  outline: none !important;
+}
+
+.cf-turnstile {
+  padding-top: 5px;
+}

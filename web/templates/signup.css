@@ -61,12 +61,22 @@ input{
     border: 1px solid #FFFFFF;
     color: #000000;
     background-color: rgba(0, 0, 0, 0);
+    text-color: #white;
 }
 ::placeholder{
     color: white;
 }
+input, select, textarea{
+    color: white;
+}
+
+textarea:focus, input:focus {
+    color: white;
+    outline: none !important;
+}
+
 button{
-    margin-top: 50px;
+    margin-top: 15px;
     margin-left: 10px;
     width: 100%;
     background-color: transparent;
@@ -81,4 +91,8 @@ button{
 button:hover{
     color:#000000;
     background-color:#FFFFFF;
+}
+
+.cf-turnstile {
+    padding-top: 5px;
 }
