@@ -13,5 +13,5 @@ TODO List:
 |          | :x:    | impliment deleting accounts |
 |          | :x:    | get 404 page to actually show |
 |          | :x:    | cookie popup |
-|          | :x:    | tos page |
+|          | :warning: | tos page - need to work on |
 |          | :x:    | text only site version |
