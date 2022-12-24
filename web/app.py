@@ -147,7 +147,6 @@ from werkzeug.utils import secure_filename
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 def allowed_file(filename):
-    print(f"dd {filename}")
     return True if filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS else False
 
 @main.route('/admin', methods=['GET', 'POST'])
@@ -164,7 +163,6 @@ def admin():
                 flash('No selected file')
                 return redirect(request.url)
             if allowed_file(file.filename):
-                print(file)
                 file.save(f"templates/images/{file.filename}")
             return redirect(url_for('main.admin'))
         return render_template('console.html')
@@ -188,7 +186,6 @@ def add():
         curr_items.append(info)
         with open('static/items.json', 'w') as f:
             json.dump(curr_items, f)
-        print(info)
         return redirect(url_for('main.admin'))
     else:
         return redirect('/')
