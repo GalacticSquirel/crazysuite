@@ -6,8 +6,13 @@ import json
 from git.cmd import Git
 from git.repo import Repo
 import os
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 main = Blueprint('main', __name__)
+
+limiter = Limiter(key_func=get_remote_address)
+limiter.init_app(main)
 
 @main.route('/update_server', methods=['POST'])
 def webhook():
@@ -135,6 +140,10 @@ def about_us():
 def about_uscss():
     return send_file('templates//about-us.css')
 
+@main.route('/rate-limit.css')
+def rate_limitcss():
+    return send_file('templates//rate_limit.css')
+
 @main.route('/images/<image_name>')
 def images(image_name):
     if str(image_name) +".png" in os.listdir("templates//images"):
@@ -190,10 +199,14 @@ def add():
     else:
         return redirect('/')
 
-def handle_not_found(error):    
+def handle_not_found(error):   
     return render_template('not_found.html'), 404
+def rate_limit_reached(error):
+    return render_template('rate_limit.html'), 429
 
 @main.route("/api/prices")
+@limiter.limit("48/day")
+@limiter.limit("2/hour")
 def api_prices():
     with open("static//items.json", "rb") as f:
         items = json.load(f)
@@ -208,6 +221,7 @@ app = create_app()
 
 if __name__ == '__main__':
     db.create_all(app=create_app())
+    app.register_error_handler(429, rate_limit_reached)
     app.register_error_handler(404, handle_not_found)
     app.run(debug=True,host='0.0.0.0') 
     

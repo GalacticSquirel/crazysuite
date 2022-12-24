@@ -9,8 +9,13 @@ from __init__ import db
 import re
 import requests
 import json
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 auth = Blueprint('auth', __name__) # create a Blueprint object that we name 'auth'
+
+limiter = Limiter(key_func=get_remote_address)
+limiter.init_app(auth)
 
 def captcha(form_response):
     with open("secrets.json", "r") as f:
@@ -20,6 +25,10 @@ def captcha(form_response):
     return response["success"]
 
 @auth.route('/login', methods=['GET', 'POST']) # define login page path
+@limiter.limit("24/day")
+@limiter.limit("30/hour")
+@limiter.limit("30/minute")
+@limiter.limit("1/second")
 def login(): # define login page fucntion
     if not current_user.is_authenticated:
         if request.method=='GET': # if the request is a GET we return the login page
@@ -49,6 +58,7 @@ def login(): # define login page fucntion
         return redirect('/')
 
 @auth.route('/signup', methods=['GET', 'POST'])# we define the sign up path
+@limiter.limit("1/day")
 #@login_required
 def signup(): # define the sign up function
     if not current_user.is_authenticated:
@@ -115,6 +125,8 @@ def signup(): # define the sign up function
         return redirect('/')
 
 @auth.route('/ChangePass', methods=['POST'])
+@limiter.limit("12/day")
+@limiter.limit("1/hour")
 @login_required
 def ChangePass():
     email = str(request.form.get('email'))

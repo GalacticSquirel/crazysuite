@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<head>
+    <title>404 Not Found</title>
+    <link rel="stylesheet" href="not_found.css">
+
+    <script language="JavaScript" type="text/javascript">
+        var seconds = 10;
+        // countdown timer. took 6 because page takes approx 1 sec to load
+        var url="/home";
+        // variable for index.html url
+        function redirect(){
+            if (seconds <=0){
+            // redirect to new url after counter  down.
+            window.location = url;
+            } else {
+            seconds--;
+            document.getElementById("pageInfo").innerHTML="Redirecting to Home Page after "
+        +seconds+" seconds."
+            setTimeout("redirect()", 1000)
+            }
+        }
+    </script>
+
+</head>
+    <body onload="redirect()">
+        <div id="container">
+            <div vertical-layout id="vertical-layout">
+                <h1 class="title">
+                    Oops! You are sending too many requests!
+                </h1>
+                <p>
+                    Wait a bit before trying it again
+                </p>
+                <p><a href="/home">Click Here</a> to return home</p>
+                <p id="pageInfo"></p>
+            </div>
+        </div>
+    </body>
+</html>
