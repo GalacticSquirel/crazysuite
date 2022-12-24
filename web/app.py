@@ -77,37 +77,6 @@ def shop():
     with_urls = list(shop_items)
     return render_template('shop.html', shop_items=with_urls)
 
-
-@main.route('/shop/<string:item_name>')
-def productdetails(item_name):
-    addresses = []
-    shop_items = json.load(open('static/items.json', 'r'))
-    for item in shop_items:
-        addresses.append(item["page_name"])
-
-    try:
-        index = addresses.index(item_name)
-    except ValueError:
-        item_details = {"name": "Name",
-                        "page_name": "",
-                        "description": "",
-                        "full_description": "Description",
-                        "genre": "Genre",
-                        "image_url": "/images/place_holder",
-                        "price": "Price",
-                        "big_image_url": "/images/place_holder"}
-        return render_template("productdetails.html", item_details=item_details)
-    item_details = {"name": shop_items[index]["name"],
-                    "page_name": shop_items[index]["page_name"],
-                    "description": shop_items[index]["description"],
-                    "full_description": shop_items[index]["full_description"],
-                    "genre": shop_items[index]["genre"],
-                    "image_url": shop_items[index]["image_url"],
-                    "price": shop_items[index]["price"],
-                    "big_image_url": shop_items[index]["big_image_url"]}
-    return render_template('productdetails.html', item_details=item_details)
-
-
 @main.route('/shop/productdetails.css')
 def product_detailscss():
     return send_file('templates//productdetails.css')
@@ -120,18 +89,14 @@ def product_detailsstylecss():
 
 @main.route('/signup.css')
 def signupcss():
-    if not current_user.is_authenticated:
-        return send_file('templates//signup.css')
-    else:
-        return redirect('/')
+    return send_file('templates//signup.css')
+
 
 
 @main.route('/login.css')
 def logincss():
-    if not current_user.is_authenticated:
-        return send_file('templates//login.css')
-    else:
-        return redirect('/')
+    return send_file('templates//login.css')
+
 
 
 @main.route('/admin.css')
@@ -188,7 +153,6 @@ def about_uscss():
 def rate_limitcss():
     return send_file('templates//rate_limit.css')
 
-
 @main.route('/images/<image_name>')
 def images(image_name):
     if str(image_name) + ".png" in os.listdir("templates//images"):
@@ -202,6 +166,35 @@ ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 def allowed_file(filename):
     return True if filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS else False
+
+@main.route('/shop/<string:item_name>')
+def productdetails(item_name):
+    addresses = []
+    shop_items = json.load(open('static/items.json', 'r'))
+    for item in shop_items:
+        addresses.append(item["page_name"])
+
+    try:
+        index = addresses.index(item_name)
+    except ValueError:
+        item_details = {"name": "Name",
+                        "page_name": "",
+                        "description": "",
+                        "full_description": "Description",
+                        "genre": "Genre",
+                        "image_url": "/images/place_holder",
+                        "price": "Price",
+                        "big_image_url": "/images/place_holder"}
+        return render_template("productdetails.html", item_details=item_details)
+    item_details = {"name": shop_items[index]["name"],
+                    "page_name": shop_items[index]["page_name"],
+                    "description": shop_items[index]["description"],
+                    "full_description": shop_items[index]["full_description"],
+                    "genre": shop_items[index]["genre"],
+                    "image_url": shop_items[index]["image_url"],
+                    "price": shop_items[index]["price"],
+                    "big_image_url": shop_items[index]["big_image_url"]}
+    return render_template('productdetails.html', item_details=item_details)
 
 
 @main.route('/admin', methods=['GET', 'POST'])
@@ -247,14 +240,6 @@ def add():
         return redirect(url_for('main.admin'))
     else:
         return redirect('/')
-
-
-def handle_not_found(error):
-    return render_template('not_found.html'), 404
-
-
-def rate_limit_reached(error):
-    return render_template('rate_limit.html'), 429
 
 
 @main.route("/api/prices")
@@ -445,6 +430,13 @@ def ChangePass():
 def logout():
     logout_user()
     return redirect(url_for('main.index'))
+
+def handle_not_found(error):
+    return render_template('not_found.html'), 404
+
+
+def rate_limit_reached(error):
+    return render_template('rate_limit.html'), 429
 
 
 if __name__ == '__main__':
