@@ -47,11 +47,13 @@ def webhook():
 
 
 @main.route('/')
+@limiter.limit("1/second")
 def index():
     return redirect('/home')
 
 
 @main.route('/home')
+@limiter.limit("1/second")
 def home():
     return render_template('index.html')
 
@@ -62,6 +64,7 @@ def favicon():
 
 
 @main.route('/account')
+@limiter.limit("1/second")
 @login_required
 def account():
     return render_template('account.html', name=current_user.name)
@@ -126,6 +129,7 @@ def shopcss():
 
 
 @main.route('/terms')
+@limiter.limit("1/second")
 def terms():
     return render_template('terms.html')
 
@@ -136,6 +140,7 @@ def termscss():
 
 
 @main.route('/About-Us')
+@limiter.limit("1/second")
 def about_us():
     return render_template('about-us.html')
 
@@ -164,6 +169,7 @@ def allowed_file(filename):
     return True if filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS else False
 
 @main.route('/shop/<string:item_name>')
+@limiter.limit("1/second")
 def productdetails(item_name):
     addresses = []
     shop_items = json.load(open('static/items.json', 'r'))
