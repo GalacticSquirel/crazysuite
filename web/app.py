@@ -1,6 +1,5 @@
 
 import json
-import json
 import os
 import re
 
@@ -20,10 +19,7 @@ from flask import (
     url_for,
 )
 from flask_limiter import Limiter
-from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from flask_limiter.util import get_remote_address
-from flask_login import current_user, login_required
 from flask_login import current_user, login_required, login_user, logout_user
 from git.cmd import Git
 from git.repo import Repo
@@ -212,7 +208,7 @@ def admin():
                 return redirect(request.url)
             if allowed_file(file.filename):
                 file.save(f"templates/images/{file.filename}")
-            return redirect(url_for('main.admin'))
+            return redirect(url_for('admin'))
         return render_template('console.html')
     else:
         return redirect('/')
@@ -227,9 +223,9 @@ def add():
             "description"), "full_description": form.get("full_description"), "price": form.get("price"), "genre": form.get("genre")}
         # info = list(map(lambda x: form.get(x), info_names))
         info["image_url"] = (
-            url_for('main.images', image_name=form.get("image_name")))
+            url_for('images', image_name=form.get("image_name")))
         info["big_image_url"] = (
-            url_for('main.images', image_name=form.get("big_image_name")))
+            url_for('images', image_name=form.get("big_image_name")))
 
         with open('static/items.json', 'r') as f:
             curr_items = json.load(f)
@@ -237,7 +233,7 @@ def add():
         curr_items.append(info)
         with open('static/items.json', 'w') as f:
             json.dump(curr_items, f)
-        return redirect(url_for('main.admin'))
+        return redirect(url_for('admin'))
     else:
         return redirect('/')
 
@@ -284,18 +280,18 @@ def login():  # define login page fucntion
             # take the user-supplied password, hash it, and compare it to the hashed password in the database
             if not user:
                 flash('Please sign up before!')
-                return redirect(url_for('main.signup'))
+                return redirect(url_for('signup'))
             elif not check_password_hash(user.password, str(password)):
                 flash('Please check your login details and try again.')
                 # if the user doesn't exist or password is wrong, reload the page
-                return redirect(url_for('main.login'))
+                return redirect(url_for('login'))
             # if the above check passes, then we know the user has the right credentials
             if captcha(verify) == True:
                 login_user(user, remember=remember)
-                return redirect(url_for('main.account'))
+                return redirect(url_for('account'))
             else:
                 flash('Failed Captcha!')
-                return redirect(url_for("main.login"))
+                return redirect(url_for("login"))
     else:
         return redirect('/')
 
@@ -317,21 +313,21 @@ def signup():  # define the sign up function
             regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
             if not (re.fullmatch(regex, email)):
                 flash("Invalid Email")
-                return redirect(url_for('main.signup'))
+                return redirect(url_for('signup'))
 
             if name == "":
                 flash("Invalid Name, you must have one")
-                return redirect(url_for('main.signup'))
+                return redirect(url_for('signup'))
             if len(list(str(name))) < 4:
                 flash("Invalid Name, must be at least 4 characters")
-                return redirect(url_for('main.signup'))
+                return redirect(url_for('signup'))
             l, u, p, d = 0, 0, 0, 0
             special = ["!", '"', "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/",
                        ":", ";", "<", "=", ">", "?", "@", "[", "]", "^", "_", "`", "{", "|", "}", "~"]
             s = str(password)
             if s == "":
                 flash("Invalid Password, you must have one")
-                return redirect(url_for('main.signup'))
+                return redirect(url_for('signup'))
             if (len(s) >= 8):
                 for i in s:
                     if (i.islower()):
@@ -346,7 +342,7 @@ def signup():  # define the sign up function
 
                 flash(
                     "Invalid Password, include at least one upper and lower letters and one number and a special character")
-                return redirect(url_for('main.signup'))
+                return redirect(url_for('signup'))
 
             ip = str(request.remote_addr)
 
@@ -354,7 +350,7 @@ def signup():  # define the sign up function
             user = User.query.filter_by(email=email).first()
             if user:  # if a user is found, we want to redirect back to signup page so user can try again
                 flash('Email address already exists')
-                return redirect(url_for('main.signup'))
+                return redirect(url_for('signup'))
 
             if captcha(verify) == True:
                 # create a new user with the form data. Hash the password so the plaintext version isn't saved.
@@ -363,10 +359,10 @@ def signup():  # define the sign up function
                 # add the new user to the database
                 db.session.add(new_user)
                 db.session.commit()
-                return redirect(url_for('main.login'))
+                return redirect(url_for('login'))
             else:
                 flash('Failed Captcha!')
-                return redirect(url_for('main.signup'))
+                return redirect(url_for('signup'))
     else:
         return redirect('/')
 
@@ -429,7 +425,7 @@ def ChangePass():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('main.index'))
+    return redirect(url_for('index'))
 
 def handle_not_found(error):
     return render_template('not_found.html'), 404
