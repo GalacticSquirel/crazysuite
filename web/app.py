@@ -297,73 +297,81 @@ def login():  # define login page fucntion
         return redirect('/')
 
 
-@main.route('/signup', methods=['GET', 'POST'])  # we define the sign up path
-@limiter.limit("1/day")
-# @login_required
+
+@main.route('/signup', methods=['GET'])  # we define the sign up path
+@limiter.limit("30/minute")
+@limiter.limit("1/second")
 def signup():  # define the sign up function
     if not current_user.is_authenticated:
-        if request.method == 'GET':  # If the request is GET we return the sign up page and forms
-            return render_template('signup.html')
-        else:  # if the request is POST, then we check if the email doesn't already exist and then we save data
-            email = str(request.form.get('email'))
-            name = request.form.get('name')
-            password = request.form.get('password')
-            verify = request.form.get('cf-turnstile-response')
+        return render_template('signup.html')
+    else:
+        return redirect('/')
 
-            errors = []
-            regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
-            if not (re.fullmatch(regex, email)):
-                flash("Invalid Email")
-                return redirect(url_for('signup'))
+@main.route('/signup', methods=['POST'])  # we define the sign up path
+@limiter.limit("15/minute")
+@limiter.limit("1/second")
+# @login_required
+def signupPOST():  # define the sign up function
+    if not current_user.is_authenticated:
+        email = str(request.form.get('email'))
+        name = request.form.get('name')
+        password = request.form.get('password')
+        verify = request.form.get('cf-turnstile-response')
 
-            if name == "":
-                flash("Invalid Name, you must have one")
-                return redirect(url_for('signup'))
-            if len(list(str(name))) < 4:
-                flash("Invalid Name, must be at least 4 characters")
-                return redirect(url_for('signup'))
-            l, u, p, d = 0, 0, 0, 0
-            special = ["!", '"', "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/",
-                       ":", ";", "<", "=", ">", "?", "@", "[", "]", "^", "_", "`", "{", "|", "}", "~"]
-            s = str(password)
-            if s == "":
-                flash("Invalid Password, you must have one")
-                return redirect(url_for('signup'))
-            if (len(s) >= 8):
-                for i in s:
-                    if (i.islower()):
-                        l += 1
-                    if (i.isupper()):
-                        u += 1
-                    if (i.isdigit()):
-                        d += 1
-                    if i in special:
-                        p += 1
-            if not (l >= 1 and u >= 1 and p >= 1 and d >= 1 and l+p+u+d == len(s)):
+        errors = []
+        regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+        if not (re.fullmatch(regex, email)):
+            flash("Invalid Email")
+            return redirect(url_for('signup'))
 
-                flash(
-                    "Invalid Password, include at least one upper and lower letters and one number and a special character")
-                return redirect(url_for('signup'))
+        if name == "":
+            flash("Invalid Name, you must have one")
+            return redirect(url_for('signup'))
+        if len(list(str(name))) < 4:
+            flash("Invalid Name, must be at least 4 characters")
+            return redirect(url_for('signup'))
+        l, u, p, d = 0, 0, 0, 0
+        special = ["!", '"', "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/",
+                    ":", ";", "<", "=", ">", "?", "@", "[", "]", "^", "_", "`", "{", "|", "}", "~"]
+        s = str(password)
+        if s == "":
+            flash("Invalid Password, you must have one")
+            return redirect(url_for('signup'))
+        if (len(s) >= 8):
+            for i in s:
+                if (i.islower()):
+                    l += 1
+                if (i.isupper()):
+                    u += 1
+                if (i.isdigit()):
+                    d += 1
+                if i in special:
+                    p += 1
+        if not (l >= 1 and u >= 1 and p >= 1 and d >= 1 and l+p+u+d == len(s)):
 
-            ip = str(request.remote_addr)
+            flash(
+                "Invalid Password, include at least one upper and lower letters and one number and a special character")
+            return redirect(url_for('signup'))
 
-            # if this returns a user, then the email already exists in database
-            user = User.query.filter_by(email=email).first()
-            if user:  # if a user is found, we want to redirect back to signup page so user can try again
-                flash('Email address already exists')
-                return redirect(url_for('signup'))
+        ip = str(request.remote_addr)
 
-            if captcha(verify) == True:
-                # create a new user with the form data. Hash the password so the plaintext version isn't saved.
-                new_user = User(email=email, name=name, password=generate_password_hash(
-                    str(password), method='sha256'))
-                # add the new user to the database
-                db.session.add(new_user)
-                db.session.commit()
-                return redirect(url_for('login'))
-            else:
-                flash('Failed Captcha!')
-                return redirect(url_for('signup'))
+        # if this returns a user, then the email already exists in database
+        user = User.query.filter_by(email=email).first()
+        if user:  # if a user is found, we want to redirect back to signup page so user can try again
+            flash('Email address already exists')
+            return redirect(url_for('signup'))
+
+        if captcha(verify) == True:
+            # create a new user with the form data. Hash the password so the plaintext version isn't saved.
+            new_user = User(email=email, name=name, password=generate_password_hash(
+                str(password), method='sha256'))
+            # add the new user to the database
+            db.session.add(new_user)
+            db.session.commit()
+            return redirect(url_for('login'))
+        else:
+            flash('Failed Captcha!')
+            return redirect(url_for('signup'))
     else:
         return redirect('/')
 
