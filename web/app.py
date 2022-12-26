@@ -24,6 +24,7 @@ from werkzeug.utils import secure_filename
 
 from __init__ import create_app, db
 from models import User
+import key_management as keys
 
 main = create_app()
 limiter = Limiter(key_func=get_remote_address)
@@ -40,7 +41,11 @@ def webhook():
     else:
         return jsonify({"error": "Failed"})
 
-
+########################################################################
+########################################################################
+#######################       Endpoints        #########################
+########################################################################
+########################################################################
 @main.route('/')
 @limiter.limit("1/second")
 def index():
@@ -150,39 +155,6 @@ def rate_limitcss():
     return send_file('templates//rate_limit.css')
 
 
-@main.route('/images/<image_name>')
-def images(image_name: str):
-    """
-    Send the requested image file if it exists, otherwise send a placeholder image.
-
-    Args:
-    image_name: The name of the requested image file.
-
-    Returns:
-    Send file: The requested image file if it exists, otherwise the placeholder image file.
-    """
-    if str(image_name) + ".png" in os.listdir("templates//images"):
-        return send_file(f"templates//images//{image_name}.png")
-    else:
-        return send_file(f"templates//images//place_holder.png")
-
-
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
-
-
-def allowed_file(filename: str) -> bool:
-    """
-    Check if a given file has an allowed file extension.
-
-    Args:
-    filename: The name of the file to check.
-
-    Returns:
-    bool: True if the file has an allowed extension, False otherwise.
-    """
-    return True if filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS else False
-
-
 @main.route('/shop/<string:item_name>')
 @limiter.limit("1/second")
 def productdetails(item_name: str):
@@ -221,6 +193,73 @@ def productdetails(item_name: str):
                     "price": shop_items[index]["price"],
                     "big_image_url": shop_items[index]["big_image_url"]}
     return render_template('productdetails.html', item_details=item_details)
+
+########################################################################
+########################################################################
+#######################       Logic        #############################
+########################################################################
+########################################################################
+
+
+def allowed_file(filename: str) -> bool:
+    """
+    Check if a given file has an allowed file extension.
+
+    Args:
+    filename: The name of the file to check.
+
+    Returns:
+    bool: True if the file has an allowed extension, False otherwise.
+    """
+    return True if filename.rsplit('.', 1)[1].lower() in {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'} else False
+
+
+def password_check(password: str) -> bool:
+    l, u, p, d = 0, 0, 0, 0
+    special = ["!", '"', "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/",
+               ":", ";", "<", "=", ">", "?", "@", "[", "]", "^", "_", "`", "{", "|", "}", "~"]
+    s = str(password)
+    if s == "":
+        return False
+    if s == None:
+        return False
+    if (len(s) >= 8):
+        for i in s:
+            if (i.islower()):
+                l += 1
+            if (i.isupper()):
+                u += 1
+            if (i.isdigit()):
+                d += 1
+            if i in special:
+                p += 1
+    if not (l >= 1 and u >= 1 and p >= 1 and d >= 1 and l+p+u+d == len(s)):
+        return False
+    return True
+
+
+########################################################################
+########################################################################
+#######################       Admin        #############################
+########################################################################
+########################################################################
+
+
+@main.route('/images/<image_name>')
+def images(image_name: str):
+    """
+    Send the requested image file if it exists, otherwise send a placeholder image.
+
+    Args:
+    image_name: The name of the requested image file.
+
+    Returns:
+    Send file: The requested image file if it exists, otherwise the placeholder image file.
+    """
+    if str(image_name) + ".png" in os.listdir("templates//images"):
+        return send_file(f"templates//images//{image_name}.png")
+    else:
+        return send_file(f"templates//images//place_holder.png")
 
 
 @main.route('/admin', methods=['GET', 'POST'])
@@ -285,6 +324,12 @@ def add():
     else:
         return redirect('/')
 
+########################################################################
+########################################################################
+#######################       API        ###############################
+########################################################################
+########################################################################
+
 
 @main.route("/api/prices")
 @limiter.limit("48/day")
@@ -298,6 +343,11 @@ def api_prices():
     return send_file("static//prices.json")
 
 
+########################################################################
+########################################################################
+#######################       Auth       ###############################
+########################################################################
+########################################################################
 def captcha(form_response: str) -> bool:
     """
         Check the validity of the provided CAPTCHA response.
@@ -407,30 +457,10 @@ def signupPOST():  # define the sign up function
         if len(list(str(name))) < 4:
             flash("Invalid Name, must be at least 4 characters")
             return redirect(url_for('signup'))
-        l, u, p, d = 0, 0, 0, 0
-        special = ["!", '"', "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/",
-                   ":", ";", "<", "=", ">", "?", "@", "[", "]", "^", "_", "`", "{", "|", "}", "~"]
-        s = str(password)
-        if s == "":
-            flash("Invalid Password, you must have one")
-            return redirect(url_for('signup'))
-        if (len(s) >= 8):
-            for i in s:
-                if (i.islower()):
-                    l += 1
-                if (i.isupper()):
-                    u += 1
-                if (i.isdigit()):
-                    d += 1
-                if i in special:
-                    p += 1
-        if not (l >= 1 and u >= 1 and p >= 1 and d >= 1 and l+p+u+d == len(s)):
 
-            flash(
-                "Invalid Password, include at least one upper and lower letters and one number and a special character")
+        if not password_check(str(password)):
+            flash("Invalid Password, include at least one upper and lower letters and one number and a special character")
             return redirect(url_for('signup'))
-
-        ip = str(request.remote_addr)
 
         # if this returns a user, then the email already exists in database
         user = User.query.filter_by(email=email).first()
@@ -474,32 +504,16 @@ def ChangePass():
         Returns:
         None: The function redirects the user to the appropriate page.
     """
-    email = str(request.form.get('email'))
+    email = str(current_user.email)
     old_password = str(request.form.get('old-password'))
     new_password = str(request.form.get('new-password'))
     verify = request.form.get('cf-turnstile-response')
 
-    errors = []
+    errors = []  # TODO: implement multiple error catching so that all errors can be displayed
     regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
-    if not (re.fullmatch(regex, email)):  # check valid email
+    if not (re.fullmatch(regex, email)):
         return redirect('/account')
-    l, u, p, d = 0, 0, 0, 0
-    special = ["!", '"', "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/",
-               ":", ";", "<", "=", ">", "?", "@", "[", "]", "^", "_", "`", "{", "|", "}", "~"]
-    s = str(new_password)
-    if s == "":
-        return redirect('/account')
-    if (len(s) >= 8):
-        for i in s:
-            if (i.islower()):
-                l += 1
-            if (i.isupper()):
-                u += 1
-            if (i.isdigit()):
-                d += 1
-            if i in special:
-                p += 1
-    if not (l >= 1 and u >= 1 and p >= 1 and d >= 1 and l+p+u+d == len(s)):  # check new password valid
+    if not password_check(str(new_password)):
         return redirect('/account')
 
     ip = str(request.remote_addr)
@@ -532,6 +546,12 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+########################################################################
+########################################################################
+#######################       Errors        ############################
+########################################################################
+########################################################################
+
 
 def handle_not_found(error):
     return render_template('not_found.html'), 404
@@ -546,6 +566,3 @@ if __name__ == '__main__':
     main.register_error_handler(429, rate_limit_reached)
     main.register_error_handler(404, handle_not_found)
     main.run(debug=True, host='0.0.0.0')
-
-
-# profile page is controls
