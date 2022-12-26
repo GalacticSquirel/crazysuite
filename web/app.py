@@ -2,6 +2,7 @@
 import json
 import os
 import re
+from datetime import datetime
 
 from flask import (
     Blueprint,
@@ -335,7 +336,7 @@ def add():
         if not os.path.exists("LOGS/admin_add.log"):
             open("LOGS/admin_add.log", "x")
         with open("LOGS/admin_add.log", "a") as f:
-            f.write(str(request.remote_addr) + "\n")
+            f.write(str(datetime.now()) + " | " + str(request.remote_addr) + "\n")
         abort(404)
 
 ########################################################################
@@ -580,7 +581,7 @@ def handle_not_found(error):
     if not os.path.exists("LOGS/404.log"):
         open("LOGS/404.log", "x")
     with open("LOGS/404.log", "a") as f:
-        f.write(str(request.remote_addr) + " | " + str(request.url) + "\n")
+        f.write(str(datetime.now()) + " | " + str(request.remote_addr) + " | " + str(request.url) + "\n")
     return render_template('not_found.html'), 404
 
 
@@ -588,7 +589,7 @@ def rate_limit_reached(error):
     if not os.path.exists("LOGS/rate_limit.log"):
         open("LOGS/rate_limit.log", "x")
     with open("LOGS/rate_limit.log", "a") as f:
-        f.write(str(request.remote_addr) + " | " + str(request.url) + "\n")
+        f.write(str(datetime.now()) + " | " + str(request.remote_addr) + " | " + str(request.url) + "\n")
     return render_template('rate_limit.html'), 429
 
 
