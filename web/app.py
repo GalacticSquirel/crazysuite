@@ -228,6 +228,7 @@ def productdetails(item_name: str):
 
 
 @main.route('/admin', methods=['GET', 'POST'])
+@limiter.limit("1/second")
 @login_required
 def admin():
     """
@@ -259,6 +260,7 @@ def admin():
 
 
 @main.route('/admin/add', methods=['GET', 'POST'])
+@limiter.limit("1/second")
 @login_required
 def add():
     """
