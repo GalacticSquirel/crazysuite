@@ -13,4 +13,4 @@ TODO List:
 |          | :x:    | impliment deleting accounts |
 |          | :x:    | cookie popup |
 |          | :warning: | tos page - need to work on |
-|          | :x:    | add removal of product to admin page|
+|          | :x:    | add removal and editing of product to admin page|
