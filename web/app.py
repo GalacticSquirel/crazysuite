@@ -66,6 +66,7 @@ def account():
 
 
 @main.route('/shop')
+@limiter.limit("1/second")
 def shop():
     shop_items = json.load(open('static/items.json', 'r'))
     with_urls = list(shop_items)
@@ -525,6 +526,7 @@ def ChangePass():
 
 
 @main.route('/logout')
+@limiter.limit("1/second")
 @login_required
 def logout():
     logout_user()
