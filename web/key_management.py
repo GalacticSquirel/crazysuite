@@ -2,6 +2,8 @@ import json
 import uuid
 from typing import Union
 
+key_to_product = {key: product for product, product_keys in json.load(open("keys.json", "r")).items() for key_dict in product_keys for key in key_dict}
+
 def save(data):
     with open('keys.json', 'w') as f:
         json.dump(data, f)
@@ -48,23 +50,30 @@ def generate_key() -> str:
     return key
 
 
-def add_key(product: str) -> None:
+def add_key(product: str) -> Union[str, bool]:
     """
         Add a new key for a given product.
 
         Parameters:
         product (str): The product for which a new key should be added.
+        
+        Returns:
+            Union[str, bool]: If the key is successfully generated, returns the key. If the key is not, returns False.
     """
     if product in get_products():
+        new_key = generate_key()
         with open('keys.json', 'r') as f:
             data = json.load(f)
         if product in json.load(open("keys.json", "r")).keys():
-            data[product].append({generate_key(): None})
+            data[product].append({new_key: None})
         else:
-            data[product] = [{generate_key(): None}]
+            data[product] = [{new_key: None}]
 
         save(data)
         print(data)
+    else:
+        return False
+    return new_key
 
 
 def check_key(key: str, product: str) -> bool:
@@ -99,8 +108,6 @@ def redeem(key: str, uid: int) -> Union[bool, str]:
     with open("keys.json", "r") as f:
         data = json.load(f)
 
-    key_to_product = {key: product for product, product_keys in data.items(
-    ) for key_dict in product_keys for key in key_dict}
 
     product = key_to_product.get(key)
 
@@ -111,6 +118,15 @@ def redeem(key: str, uid: int) -> Union[bool, str]:
 
     list(map(lambda product_key: product_key.update({key: uid}) if key in product_key else product_key, [
          product_key for product, product_keys in keys.items() for product_key in product_keys]))
+    save(keys)
     return product
+
+
+def owned_items(uid: int) -> list:
+    products = []
+    for key in get_keys():
+        if uid in key.values():
+            products.append(key_to_product.get(list(key.keys())[0]))
+    return products
 
 

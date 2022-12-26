@@ -357,7 +357,33 @@ def api_prices():
         json.dump(prices, f)
     return send_file("static//prices.json")
 
+########################################################################
+########################################################################
+#######################       Keys        ##############################
+########################################################################
+########################################################################
 
+@main.route("/keys/check", methods=["POST"])
+@login_required
+def check_key():
+    key = request.form.get('key')
+    if key:
+        print(key)
+        print(keys.redeem(key,current_user.id))
+    else:
+        return redirect("/account")
+    return redirect("/account")
+
+
+@main.route("/keys/owned", methods=["GET"])
+@login_required
+def owned():
+    owned_items = keys.owned_items(current_user.id)
+    urls = {}
+    for item in owned_items:
+        pass
+    print(owned_items)
+    return render_template("owned.html", owned_items=owned_items)
 ########################################################################
 ########################################################################
 #######################       Auth       ###############################

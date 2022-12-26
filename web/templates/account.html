@@ -16,19 +16,22 @@
             <option value="AccountDeactivate">Deactivate Account</option>
         </select>
         <div id="forms">
-            <form name="owned" method="GET" action="{{url_for("index")}}">
+            <form name="owned">
                 <div class="owned-items">
                     <p class="owned-items-title">Owned Products:</p>
+                        <iframe src="{{url_for("owned")}}"></iframe>
                 </div>
             </form>
-            <form name="Activate" class="product-key-form" method="POST" action="{{url_for("login")}}">
+            <form name="Activate" class="product-key-form" method="POST" action="{{url_for("check_key")}}">
                 <div id="container-tools">
                     <div class="search-area" style="width: calc(100% - 75px); margin: 20px; margin-top: 5px;">
-                        <input type="text" id="search" placeholder="Product Key" />
+                        <input type="text" id="key" name="key" placeholder="Product Key" />
                     </div>
                 </div>
                 <div class="cf-turnstile" data-sitekey="0x4AAAAAAABti1blkZmNh51p"></div>
-                <a href="something" id="on" class="activate">Activate Product Key</a>
+                <div id="submit" style="margin-top: 0;">
+                    <button>Activate Product Key</button>
+                </div>
             </form>
             <form name="ChangePass" method="POST" action="{{url_for("ChangePass")}}" id="fm" style="height: 620px">
                 <div vertical-layout id="vertical-layout">
