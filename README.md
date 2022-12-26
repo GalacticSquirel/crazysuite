@@ -14,3 +14,4 @@ TODO List:
 |          | :x:    | cookie popup |
 |          | :warning: | tos page - need to work on |
 |          | :x:    | impliment rate limiting for login / change pass / etc... |
+|          |        | add removal of product to admin page|
