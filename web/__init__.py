@@ -14,7 +14,7 @@ def create_app():
     db.init_app(app) # Initialiaze sqlite database
     # The login manager contains the code that lets your application and Flask-Login work together
     login_manager = LoginManager() # Create a Login Manager instance
-    login_manager.login_view = 'main.login' # define the redirection path when login required and we attempt to access without being logged in
+    login_manager.login_view = 'login' # define the redirection path when login required and we attempt to access without being logged in
     login_manager.init_app(app) # configure it for login
     from models import User
     @login_manager.user_loader
