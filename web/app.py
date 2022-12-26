@@ -330,7 +330,7 @@ def add():
                 json.dump(curr_items, f)
             return redirect(url_for('admin'))
         else:
-            abort(404)
+            return redirect(url_for('admin'))
     else:
         if not os.path.exists("LOGS/admin_add.log"):
             open("LOGS/admin_add.log", "x")
@@ -577,7 +577,7 @@ def clean_up_on_startup():
 ########################################################################
 
 def handle_not_found(error):
-    if not os.path.exists("LOGS/admin_add.log"):
+    if not os.path.exists("LOGS/404.log"):
         open("LOGS/404.log", "x")
     with open("LOGS/404.log", "a") as f:
         f.write(str(request.remote_addr) + " | " + str(request.url) + "\n")
@@ -585,7 +585,7 @@ def handle_not_found(error):
 
 
 def rate_limit_reached(error):
-    if not os.path.exists("LOGS/admin_add.log"):
+    if not os.path.exists("LOGS/rate_limit.log"):
         open("LOGS/rate_limit.log", "x")
     with open("LOGS/rate_limit.log", "a") as f:
         f.write(str(request.remote_addr) + " | " + str(request.url) + "\n")
