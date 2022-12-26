@@ -11,7 +11,8 @@ from flask import (
     render_template,
     request,
     send_file,
-    url_for,
+    url_for, 
+    abort
 )
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -273,23 +274,30 @@ def add():
         Render: A redirect to the admin console page if the user has permission, a redirect to the home page if the user does not have permission.
     """
     if current_user.id in [1, 2]:
-        form = request.form
-        info = {"name": form.get("name"), "page_name": form.get("page_name"), "description": form.get(
-            "description"), "full_description": form.get("full_description"), "price": form.get("price"), "genre": form.get("genre")}
-        info["image_url"] = (
-            url_for('images', image_name=form.get("image_name")))
-        info["big_image_url"] = (
-            url_for('images', image_name=form.get("big_image_name")))
+        if request.method == 'POST':
+            form = request.form
+            info = {"name": form.get("name"), "page_name": form.get("page_name"), "description": form.get(
+                "description"), "full_description": form.get("full_description"), "price": form.get("price"), "genre": form.get("genre")}
+            info["image_url"] = (
+                url_for('images', image_name=form.get("image_name")))
+            info["big_image_url"] = (
+                url_for('images', image_name=form.get("big_image_name")))
 
-        with open('static/items.json', 'r') as f:
-            curr_items = json.load(f)
+            with open('static/items.json', 'r') as f:
+                curr_items = json.load(f)
 
-        curr_items.append(info)
-        with open('static/items.json', 'w') as f:
-            json.dump(curr_items, f)
-        return redirect(url_for('admin'))
+            curr_items.append(info)
+            with open('static/items.json', 'w') as f:
+                json.dump(curr_items, f)
+            return redirect(url_for('admin'))
+        else:
+            abort(404)
     else:
-        return redirect('/')
+        if not os.path.exists("LOGS/admin_add.log"):
+            open("LOGS/admin_add.log", "x")
+        with open("LOGS/admin_add.log", "a") as f:
+            f.write(str(request.remote_addr) + "\n")
+        abort(404)
 
 
 @main.route("/api/prices")
@@ -538,12 +546,29 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+@main.before_first_request
+def clean_up_on_startup():
+    if os.path.exists('LOGS/admin_add.log'):
+        os.remove('LOGS/admin_add.log')
+    if os.path.exists('LOGS/404.log'):
+        os.remove('LOGS/404.log')
+    if os.path.exists('LOGS/rate_limit.log'):
+        os.remove('LOGS/rate_limit.log')
+
 
 def handle_not_found(error):
+    if not os.path.exists("LOGS/admin_add.log"):
+        open("LOGS/404.log", "x")
+    with open("LOGS/404.log", "a") as f:
+        f.write(str(request.remote_addr) + " | " + str(request.url) + "\n")
     return render_template('not_found.html'), 404
 
 
 def rate_limit_reached(error):
+    if not os.path.exists("LOGS/admin_add.log"):
+        open("LOGS/rate_limit.log", "x")
+    with open("LOGS/rate_limit.log", "a") as f:
+        f.write(str(request.remote_addr) + " | " + str(request.url) + "\n")
     return render_template('rate_limit.html'), 429
 
 

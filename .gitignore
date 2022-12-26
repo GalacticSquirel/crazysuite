@@ -152,3 +152,4 @@ cython_debug/
 #.idea/
 ui/secrets.json
 web/secrets.json
+web/LOGS/*
