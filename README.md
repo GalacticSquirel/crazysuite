@@ -11,6 +11,5 @@ TODO List:
 | :five:   | :x:    | impliment captcha to activate key |
 |          | :x:    | impliment email verification to new accounts |
 |          | :x:    | impliment deleting accounts |
-|          | :x:    | cookie popup |
 |          | :warning: | tos page - need to work on |
 |          | :x:    | add removal and editing of product to admin page|
