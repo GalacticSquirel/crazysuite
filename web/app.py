@@ -71,6 +71,7 @@ def shop():
     with_urls = list(shop_items)
     return render_template('shop.html', shop_items=with_urls)
 
+
 @main.route('/shop/productdetails.css')
 def product_detailscss():
     return send_file('templates//productdetails.css')
@@ -86,11 +87,9 @@ def signupcss():
     return send_file('templates//signup.css')
 
 
-
 @main.route('/login.css')
 def logincss():
     return send_file('templates//login.css')
-
 
 
 @main.route('/admin.css')
@@ -149,8 +148,18 @@ def about_uscss():
 def rate_limitcss():
     return send_file('templates//rate_limit.css')
 
+
 @main.route('/images/<image_name>')
-def images(image_name):
+def images(image_name: str):
+    """
+    Send the requested image file if it exists, otherwise send a placeholder image.
+
+    Args:
+    image_name: The name of the requested image file.
+
+    Returns:
+    Send file: The requested image file if it exists, otherwise the placeholder image file.
+    """
     if str(image_name) + ".png" in os.listdir("templates//images"):
         return send_file(f"templates//images//{image_name}.png")
     else:
@@ -160,12 +169,31 @@ def images(image_name):
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 
-def allowed_file(filename):
+def allowed_file(filename: str) -> bool:
+    """
+    Check if a given file has an allowed file extension.
+
+    Args:
+    filename: The name of the file to check.
+
+    Returns:
+    bool: True if the file has an allowed extension, False otherwise.
+    """
     return True if filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS else False
+
 
 @main.route('/shop/<string:item_name>')
 @limiter.limit("1/second")
-def productdetails(item_name):
+def productdetails(item_name: str):
+    """
+        Render the product details page for the given item. If the item does not exist, render a placeholder page.
+
+        Args:
+        item_name: The name of the item to display the details for.
+
+        Returns:
+        Render: The product details page for the given item, or a placeholder page if the item does not exist.
+    """
     addresses = []
     shop_items = json.load(open('static/items.json', 'r'))
     for item in shop_items:
@@ -197,6 +225,15 @@ def productdetails(item_name):
 @main.route('/admin', methods=['GET', 'POST'])
 @login_required
 def admin():
+    """
+        Render the admin console page, or redirect the user if they do not have permission. If a file is submitted through the form, save it if it has an allowed file extension.
+
+        Args:
+        None
+
+        Returns:
+        Render: The admin console page if the user has permission, a redirect to the home page if the user does not have permission.
+    """
     if current_user.id in [1, 2]:
         if request.method == 'POST':
             if 'file' not in request.files:
@@ -207,9 +244,10 @@ def admin():
             if file.filename == '':
                 flash('No selected file')
                 return redirect(request.url)
-            if allowed_file(file.filename):
-                file.save(f"templates/images/{file.filename}")
-            return redirect(url_for('admin'))
+            if not file.filename == None:
+                if allowed_file(file.filename):
+                    file.save(f"templates/images/{file.filename}")
+                return redirect(url_for('admin'))
         return render_template('console.html')
     else:
         return redirect('/')
@@ -218,11 +256,19 @@ def admin():
 @main.route('/admin/add', methods=['GET', 'POST'])
 @login_required
 def add():
+    """
+        Add a new product to the shop item list if the current user has permission.
+
+        Args:
+        None
+
+        Returns:
+        Render: A redirect to the admin console page if the user has permission, a redirect to the home page if the user does not have permission.
+    """
     if current_user.id in [1, 2]:
         form = request.form
         info = {"name": form.get("name"), "page_name": form.get("page_name"), "description": form.get(
             "description"), "full_description": form.get("full_description"), "price": form.get("price"), "genre": form.get("genre")}
-        # info = list(map(lambda x: form.get(x), info_names))
         info["image_url"] = (
             url_for('images', image_name=form.get("image_name")))
         info["big_image_url"] = (
@@ -245,15 +291,22 @@ def add():
 def api_prices():
     with open("static//items.json", "rb") as f:
         items = json.load(f)
-    prices = dict()
-    for item in items:
-        prices[item["name"]] = item["price"]
+    prices = list(map(lambda product: product['name'], items))
     with open("static//prices.json", "w") as f:
         json.dump(prices, f)
     return send_file("static//prices.json")
 
 
-def captcha(form_response):
+def captcha(form_response: str) -> bool:
+    """
+        Check the validity of the provided CAPTCHA response.
+
+        Args:
+        form_response (str): The CAPTCHA response provided by the user.
+
+        Returns:
+        bool: True if the CAPTCHA response is valid, False otherwise.
+    """
     with open("secrets.json", "r") as f:
         turnstile_key = (json.loads(f.read()))["cloudflare-turnstile-key"]
     CAPTCHA_url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify'
@@ -267,7 +320,21 @@ def captcha(form_response):
 @limiter.limit("30/hour")
 @limiter.limit("30/minute")
 @limiter.limit("1/second")
-def login():  # define login page fucntion
+def login():
+    """
+        Handle the login process for a user.
+
+        Verify the provided email and password against the database. If the user exists and the password is correct, log the user in and redirect them to their account page. If the user does not exist or the password is incorrect, display an error message and redirect the user back to the login page. If the request is a GET request, display the login page.
+
+        Args:
+        email (str): The email address provided by the user.
+        password (str): The password provided by the user.
+        remember (bool): A flag indicating whether the user's login should be remembered.
+        verify (str): The CAPTCHA response provided by the user.
+
+        Returns:
+        Render: The function redirects the user to the appropriate page.
+    """
     if not current_user.is_authenticated:
         if request.method == 'GET':  # if the request is a GET we return the login page
             return render_template('login.html')
@@ -287,6 +354,9 @@ def login():  # define login page fucntion
                 # if the user doesn't exist or password is wrong, reload the page
                 return redirect(url_for('login'))
             # if the above check passes, then we know the user has the right credentials
+            if verify == None:
+                flash('Failed Captcha!')
+                return redirect(url_for("login"))
             if captcha(verify) == True:
                 login_user(user, remember=remember)
                 return redirect(url_for('account'))
@@ -295,7 +365,6 @@ def login():  # define login page fucntion
                 return redirect(url_for("login"))
     else:
         return redirect('/')
-
 
 
 @main.route('/signup', methods=['GET'])  # we define the sign up path
@@ -307,11 +376,18 @@ def signup():  # define the sign up function
     else:
         return redirect('/')
 
+
 @main.route('/signup', methods=['POST'])  # we define the sign up path
 @limiter.limit("15/minute")
 @limiter.limit("1/second")
 # @login_required
 def signupPOST():  # define the sign up function
+    """
+        Handles the sign up process for a new user.
+        Validates the user's input for the email, name, and password.
+        If the input is valid, a new user is created in the database with a hashed password.
+        If the input is invalid, an error message is displayed and the user is redirected to the sign up page.
+    """
     if not current_user.is_authenticated:
         email = str(request.form.get('email'))
         name = request.form.get('name')
@@ -332,7 +408,7 @@ def signupPOST():  # define the sign up function
             return redirect(url_for('signup'))
         l, u, p, d = 0, 0, 0, 0
         special = ["!", '"', "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/",
-                    ":", ";", "<", "=", ">", "?", "@", "[", "]", "^", "_", "`", "{", "|", "}", "~"]
+                   ":", ";", "<", "=", ">", "?", "@", "[", "]", "^", "_", "`", "{", "|", "}", "~"]
         s = str(password)
         if s == "":
             flash("Invalid Password, you must have one")
@@ -360,7 +436,9 @@ def signupPOST():  # define the sign up function
         if user:  # if a user is found, we want to redirect back to signup page so user can try again
             flash('Email address already exists')
             return redirect(url_for('signup'))
-
+        if verify == None:
+            flash('Failed Captcha!')
+            return redirect(url_for("login"))
         if captcha(verify) == True:
             # create a new user with the form data. Hash the password so the plaintext version isn't saved.
             new_user = User(email=email, name=name, password=generate_password_hash(
@@ -381,6 +459,20 @@ def signupPOST():  # define the sign up function
 @limiter.limit("1/hour")
 @login_required
 def ChangePass():
+    """
+        Handle the password change process for a user.
+
+        Validate the provided email, old password, and new password for the user. If the input is valid, change the user's password in the database. If the input is invalid, redirect the user back to their account page.
+
+        Args:
+        email (str): The email address provided by the user.
+        old_password (str): The user's current password.
+        new_password (str): The user's desired new password.
+        verify (str): The CAPTCHA response provided by the user.
+
+        Returns:
+        None: The function redirects the user to the appropriate page.
+    """
     email = str(request.form.get('email'))
     old_password = str(request.form.get('old-password'))
     new_password = str(request.form.get('new-password'))
@@ -420,7 +512,9 @@ def ChangePass():
 
     if not check_password_hash(user.password, str(old_password)):
         return redirect('/account')
-
+    if verify == None:
+        flash('Failed Captcha!')
+        return redirect(url_for("login"))
     if captcha(verify) == True:
         current_user.password = generate_password_hash(
             str(new_password), method='sha256')
@@ -435,6 +529,7 @@ def ChangePass():
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
 
 def handle_not_found(error):
     return render_template('not_found.html'), 404
