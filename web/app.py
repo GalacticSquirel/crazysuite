@@ -204,7 +204,6 @@ def allowed_file(filename: str) -> bool:
     """
     return True if filename.rsplit('.', 1)[1].lower() in {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'} else False
 
-
 def password_check(password: str) -> bool:
     l, u, p, d = 0, 0, 0, 0
     special = ["!", '"', "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/",
@@ -252,9 +251,7 @@ def images(image_name: str):
     else:
         return send_file(f"templates//images//place_holder.png")
 
-
 @main.route('/admin', methods=['GET', 'POST'])
-
 @login_required
 def admin():
     """
@@ -284,9 +281,7 @@ def admin():
     else:
         return redirect('/')
 
-
 @main.route('/admin/add', methods=['GET', 'POST'])
-
 @login_required
 def add():
     """
@@ -453,7 +448,6 @@ def login():
     else:
         return redirect('/')
 
-
 @main.route('/signup', methods=['GET'])  # we define the sign up path
 @limiter.limit("30/minute")
 def signup():  # define the sign up function
@@ -461,7 +455,6 @@ def signup():  # define the sign up function
         return render_template('signup.html')
     else:
         return redirect('/')
-
 
 @main.route('/signup', methods=['POST'])  # we define the sign up path
 @limiter.limit("15/minute")
@@ -520,7 +513,6 @@ def signupPOST():  # define the sign up function
     else:
         return redirect('/')
 
-
 @main.route('/ChangePass', methods=['POST'])
 @limiter.limit("12/day")
 @limiter.limit("1/hour")
@@ -574,7 +566,6 @@ def ChangePass():
     else:
         return redirect('/account')
 
-
 @main.route('/logout')
 @login_required
 def logout():
@@ -589,7 +580,6 @@ def verify(key: str):
         data = json.load(f)
     uid = "None"
     if key in data.values():
-
         for k, v in data.items():
             if v == key:
                 uid = k
@@ -602,10 +592,8 @@ def verify(key: str):
         return "Key does not exist"
     return uid
 
-
 @main.route('/verifyinit')
 def verifyinit():
-
     key = str(uuid.uuid4())
     with open("email_verify.json","r") as f:
         data = json.load(f)
@@ -615,7 +603,6 @@ def verifyinit():
     print(f"http://127.0.0.1:5000/verify/{str(key)}")
     resp = email_handler.send(f"http://127.0.0.1:5000/verify/{str(key)}", current_user.email)
     return resp
-
 
 @main.before_first_request
 def clean_up_on_startup():
