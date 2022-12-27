@@ -376,6 +376,13 @@ def check_key():
         return redirect("/account")
     return redirect("/account")
 
+@main.route("/keys/check", methods=["GET"])
+def check_key_GET():
+    abort(404)
+
+@main.route("/keys/owned", methods=["POST"])
+def owned_POST():
+    abort(404)
 
 @main.route("/keys/owned", methods=["GET"])
 @login_required
