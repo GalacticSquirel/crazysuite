@@ -29,7 +29,7 @@ from models import User
 import key_management as keys
 
 main = create_app()
-limiter = Limiter(key_func=get_remote_address)
+limiter = Limiter(key_func=get_remote_address, default_limits=["1/second"])
 limiter.init_app(main)
 
 
@@ -49,31 +49,28 @@ def webhook():
 ########################################################################
 ########################################################################
 @main.route('/')
-@limiter.limit("1/second")
 def index():
     return redirect('/home')
 
 
 @main.route('/home')
-@limiter.limit("1/second")
 def home():
     return render_template('index.html')
 
 
 @main.route('/favicon.ico')
+@limiter.exempt()
 def favicon():
     return send_file('templates//favicon.ico', mimetype='image/gif')
 
 
 @main.route('/account')
-@limiter.limit("1/second")
 @login_required
 def account():
     return render_template('account.html', name=current_user.name)
 
 
 @main.route('/shop')
-@limiter.limit("1/second")
 def shop():
     shop_items = json.load(open('static/items.json', 'r'))
     with_urls = list(shop_items)
@@ -134,7 +131,6 @@ def shopcss():
 
 
 @main.route('/terms')
-@limiter.limit("1/second")
 def terms():
     return render_template('terms.html')
 
@@ -145,7 +141,6 @@ def termscss():
 
 
 @main.route('/About-Us')
-@limiter.limit("1/second")
 def about_us():
     return render_template('about-us.html')
 
@@ -164,7 +159,6 @@ def rate_limitcss():
 
 
 @main.route('/shop/<string:item_name>')
-@limiter.limit("1/second")
 def productdetails(item_name: str):
     """
         Render the product details page for the given item. If the item does not exist, render a placeholder page.
@@ -271,7 +265,7 @@ def images(image_name: str):
 
 
 @main.route('/admin', methods=['GET', 'POST'])
-@limiter.limit("1/second")
+
 @login_required
 def admin():
     """
@@ -303,7 +297,7 @@ def admin():
 
 
 @main.route('/admin/add', methods=['GET', 'POST'])
-@limiter.limit("1/second")
+
 @login_required
 def add():
     """
@@ -420,7 +414,6 @@ def captcha(form_response: str) -> bool:
 @limiter.limit("24/day")
 @limiter.limit("30/hour")
 @limiter.limit("30/minute")
-@limiter.limit("1/second")
 def login():
     """
         Handle the login process for a user.
@@ -470,7 +463,6 @@ def login():
 
 @main.route('/signup', methods=['GET'])  # we define the sign up path
 @limiter.limit("30/minute")
-@limiter.limit("1/second")
 def signup():  # define the sign up function
     if not current_user.is_authenticated:
         return render_template('signup.html')
@@ -480,7 +472,6 @@ def signup():  # define the sign up function
 
 @main.route('/signup', methods=['POST'])  # we define the sign up path
 @limiter.limit("15/minute")
-@limiter.limit("1/second")
 # @login_required
 def signupPOST():  # define the sign up function
     """
@@ -592,7 +583,6 @@ def ChangePass():
 
 
 @main.route('/logout')
-@limiter.limit("1/second")
 @login_required
 def logout():
     logout_user()
