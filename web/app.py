@@ -48,27 +48,25 @@ def webhook():
 #######################       Endpoints        #########################
 ########################################################################
 ########################################################################
+
+
 @main.route('/')
 def index():
     return redirect('/home')
 
-
 @main.route('/home')
 def home():
     return render_template('index.html')
-
 
 @main.route('/favicon.ico')
 @limiter.exempt()
 def favicon():
     return send_file('templates//favicon.ico', mimetype='image/gif')
 
-
 @main.route('/account')
 @login_required
 def account():
     return render_template('account.html', name=current_user.name)
-
 
 @main.route('/shop')
 def shop():
@@ -76,87 +74,13 @@ def shop():
     with_urls = list(shop_items)
     return render_template('shop.html', shop_items=with_urls)
 
-
-@main.route('/shop/productdetails.css')
-def product_detailscss():
-    return send_file('templates//productdetails.css')
-
-
-@main.route('/shop/style.css')
-def product_detailsstylecss():
-    return send_file('templates//style.css')
-
-
-@main.route('/signup.css')
-def signupcss():
-    return send_file('templates//signup.css')
-
-
-@main.route('/login.css')
-def logincss():
-    return send_file('templates//login.css')
-
-
-@main.route('/admin.css')
-def consolecss():
-    return send_file('templates//console.css')
-
-
-@main.route('/style.css')
-def stylecss():
-    return send_file('templates//style.css')
-
-
-@main.route('/account.css')
-def accountcss():
-    return send_file('templates//account.css')
-
-
-@main.route('/home.css')
-def homecss():
-    return send_file('templates//index.css')
-
-
-@main.route('/not_found.css')
-@main.route('/shop/not_found.css')
-@main.route('/admin/not_found.css')
-@main.route('/keys/not_found.css')
-def errornot_foundcss():
-    return send_file('templates//not_found.css')
-
-
-@main.route('/shop.css')
-def shopcss():
-    return send_file('templates//shop.css')
-
-
 @main.route('/terms')
 def terms():
     return render_template('terms.html')
 
-
-@main.route('/terms.css')
-def termscss():
-    return send_file('templates//terms.css')
-
-
 @main.route('/About-Us')
 def about_us():
     return render_template('about-us.html')
-
-
-@main.route('/terms.css')
-def about_uscss():
-    return send_file('templates//about-us.css')
-
-
-@main.route('/rate-limit.css')
-@main.route('/shop/rate-limit.css')
-@main.route('/admin/rate-limit.css')
-@main.route('/keys/rate-limit.css')
-def rate_limitcss():
-    return send_file('templates//rate_limit.css')
-
 
 @main.route('/shop/<string:item_name>')
 def productdetails(item_name: str):
@@ -195,6 +119,71 @@ def productdetails(item_name: str):
                     "price": shop_items[index]["price"],
                     "big_image_url": shop_items[index]["big_image_url"]}
     return render_template('productdetails.html', item_details=item_details)
+
+########################################################################
+########################################################################
+#######################        CSS         #############################
+########################################################################
+########################################################################
+
+
+@main.route('/terms.css')
+def about_uscss():
+    return send_file('templates//about-us.css')
+
+@main.route('/rate-limit.css')
+@main.route('/shop/rate-limit.css')
+@main.route('/admin/rate-limit.css')
+@main.route('/keys/rate-limit.css')
+@limiter.exempt()
+def rate_limitcss():
+    return send_file('templates//rate_limit.css')
+
+@main.route('/terms.css')
+def termscss():
+    return send_file('templates//terms.css')
+
+@main.route('/shop/productdetails.css')
+def product_detailscss():
+    return send_file('templates//productdetails.css')
+
+@main.route('/signup.css')
+def signupcss():
+    return send_file('templates//signup.css')
+
+@main.route('/login.css')
+def logincss():
+    return send_file('templates//login.css')
+
+@main.route('/admin.css')
+def consolecss():
+    return send_file('templates//console.css')
+
+@main.route('/style.css')
+@main.route('/shop/style.css')
+@limiter.exempt()
+def stylecss():
+    return send_file('templates//style.css')
+
+@main.route('/account.css')
+def accountcss():
+    return send_file('templates//account.css')
+
+@main.route('/home.css')
+def homecss():
+    return send_file('templates//index.css')
+
+@main.route('/not_found.css')
+@main.route('/shop/not_found.css')
+@main.route('/admin/not_found.css')
+@main.route('/keys/not_found.css')
+@limiter.exempt()
+def errornot_foundcss():
+    return send_file('templates//not_found.css')
+
+@main.route('/shop.css')
+def shopcss():
+    return send_file('templates//shop.css')
 
 ########################################################################
 ########################################################################
@@ -238,7 +227,6 @@ def password_check(password: str) -> bool:
     if not (l >= 1 and u >= 1 and p >= 1 and d >= 1 and l+p+u+d == len(s)):
         return False
     return True
-
 
 ########################################################################
 ########################################################################
@@ -359,6 +347,7 @@ def api_prices():
 ########################################################################
 ########################################################################
 
+
 @main.route("/keys/check", methods=["POST"])
 @login_required
 def check_key():
@@ -387,11 +376,14 @@ def check_key_GET():
 @main.route("/keys/owned", methods=["POST"])
 def owned_POST():
     abort(404)
+
 ########################################################################
 ########################################################################
 #######################       Auth       ###############################
 ########################################################################
 ########################################################################
+
+
 def captcha(form_response: str) -> bool:
     """
         Check the validity of the provided CAPTCHA response.
@@ -633,12 +625,12 @@ def clean_up_on_startup():
     if os.path.exists('LOGS/rate_limit.log'):
         os.remove('LOGS/rate_limit.log')
 
-
 ########################################################################
 ########################################################################
 #######################       Errors        ############################
 ########################################################################
 ########################################################################
+
 
 def handle_not_found(error):
     if not os.path.exists("LOGS/404.log"):
