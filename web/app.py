@@ -236,6 +236,7 @@ def password_check(password: str) -> bool:
 
 
 @main.route('/images/<image_name>')
+@limiter.exempt()
 def images(image_name: str):
     """
     Send the requested image file if it exists, otherwise send a placeholder image.
