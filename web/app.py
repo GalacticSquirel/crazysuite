@@ -514,11 +514,13 @@ def signupPOST():  # define the sign up function
         if captcha(verify) == True:
             # create a new user with the form data. Hash the password so the plaintext version isn't saved.
             new_user = User(email=email, name=name, password=generate_password_hash(
-                str(password), method='sha256'))
+                str(password), method='sha256'), verified=0)
             # add the new user to the database
             db.session.add(new_user)
-            db.session.commit()
-            return redirect(url_for('login'))
+            db.session.commit()            
+            user = User.query.filter_by(email=email).first()
+            login_user(user)
+            return redirect(url_for('verifyinit'))
         else:
             flash('Failed Captcha!')
             return redirect(url_for('signup'))
@@ -586,6 +588,42 @@ def ChangePass():
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+import uuid
+import email_handler
+@main.route('/verify/<string:key>')
+def verify(key: str):
+    with open("email_verify.json","r") as f:
+        data = json.load(f)
+    uid = "None"
+    if key in data.values():
+
+        for k, v in data.items():
+            if v == key:
+                uid = k
+        del data[uid]
+        current_user.verified = 1
+        db.session.commit()
+        with open("email_verify.json", "w") as f:
+            json.dump(data, f)
+    else:
+        return "Key does not exist"
+    return uid
+
+
+@main.route('/verifyinit')
+def verifyinit():
+
+    key = str(uuid.uuid4())
+    with open("email_verify.json","r") as f:
+        data = json.load(f)
+    data[current_user.id] = key
+    with open("email_verify.json", "w") as f:
+        json.dump(data, f)
+    print(f"http://127.0.0.1:5000/verify/{str(key)}")
+    resp = email_handler.send(f"http://127.0.0.1:5000/verify/{str(key)}", current_user.email)
+    return resp
+
 
 @main.before_first_request
 def clean_up_on_startup():
