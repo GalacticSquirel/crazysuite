@@ -140,6 +140,7 @@ def about_uscss():
 @main.route('/shop/rate-limit.css')
 @main.route('/admin/rate-limit.css')
 @main.route('/keys/rate-limit.css')
+@main.route('/download/rate-limit.css')
 @limiter.exempt()
 def rate_limitcss():
     return send_file('templates//rate_limit.css')
@@ -182,6 +183,7 @@ def homecss():
 @main.route('/shop/not_found.css')
 @main.route('/admin/not_found.css')
 @main.route('/keys/not_found.css')
+@main.route('/download/not_found.css')
 @limiter.exempt()
 def errornot_foundcss():
     return send_file('templates//not_found.css')
