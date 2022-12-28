@@ -16,6 +16,11 @@ def get_products() -> list:
     products = list(map(lambda product: product['name'], data))
     return products
 
+def get_product_url(product) -> Union[str, None]:
+    with open('static/items.json', 'r') as f:
+        items = json.load(f)
+
+    return next((item["download_url"] for item in items if item["name"] == product), None)
 
 def get_keys() -> list:
     with open('keys.json', 'r') as f:
@@ -122,11 +127,11 @@ def redeem(key: str, uid: int) -> Union[bool, str]:
     return product
 
 
-def owned_items(uid: int) -> list:
+def owned_items(uid: int) -> dict:
     products = []
     for key in get_keys():
         if uid in key.values():
             products.append(key_to_product.get(list(key.keys())[0]))
-    return products
-
-
+    urls = list(map(lambda x: get_product_url(x), products))
+    owned = dict(zip(products, urls))
+    return owned

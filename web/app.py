@@ -1,19 +1,20 @@
 
+from datetime import datetime
 import json
 import os
 import re
-from datetime import datetime
+import uuid
 
 from flask import (
     Blueprint,
+    abort,
     flash,
     jsonify,
     redirect,
     render_template,
     request,
     send_file,
-    url_for, 
-    abort
+    url_for,
 )
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -25,8 +26,9 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 
 from __init__ import create_app, db
-from models import User
+import email_handler
 import key_management as keys
+from models import User
 
 main = create_app()
 limiter = Limiter(key_func=get_remote_address)
@@ -69,7 +71,10 @@ def favicon():
 @limiter.limit("1/second")
 @login_required
 def account():
-    return render_template('account.html', name=current_user.name)
+    owned_items = keys.owned_items(current_user.id)
+    owned_items = list(map(lambda item: {item[0]: item[1]}, owned_items.items()))
+    
+    return render_template("account.html", owned_items=owned_items, name=current_user.name)
 
 
 @main.route('/shop')
@@ -374,16 +379,14 @@ def check_key():
         return redirect("/account")
     return redirect("/account")
 
-
+from builtins import str
 @main.route("/keys/owned", methods=["GET"])
 @login_required
 def owned():
     owned_items = keys.owned_items(current_user.id)
-    urls = {}
-    for item in owned_items:
-        pass
-    print(owned_items)
-    return render_template("owned.html", owned_items=owned_items)
+    owned_items = list(map(lambda item: {item[0]: item[1]}, owned_items.items()))
+    
+    return render_template("owned.html", owned_items=owned_items, str=str)
 ########################################################################
 ########################################################################
 #######################       Auth       ###############################
@@ -589,8 +592,7 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-import uuid
-import email_handler
+
 @main.route('/verify/<string:key>')
 def verify(key: str):
     with open("email_verify.json","r") as f:
@@ -621,8 +623,8 @@ def verifyinit():
     with open("email_verify.json", "w") as f:
         json.dump(data, f)
     print(f"http://127.0.0.1:5000/verify/{str(key)}")
-    resp = email_handler.send(f"http://127.0.0.1:5000/verify/{str(key)}", current_user.email)
-    return resp
+    email_handler.send(f"http://127.0.0.1:5000/verify/{str(key)}", current_user.email)
+    return redirect(url_for("account"))
 
 
 @main.before_first_request

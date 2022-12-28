@@ -19,7 +19,12 @@
             <form name="owned">
                 <div class="owned-items">
                     <p class="owned-items-title">Owned Products:</p>
-                        <iframe src="{{url_for("owned")}}"></iframe>
+                    {% for item in owned_items %}
+
+                        <a href="{{ "".join(item.values()) }}">{{ "".join(item.keys()) }}</a>
+                        <br/>
+                    
+                    {% endfor %}
                 </div>
             </form>
             <form name="Activate" class="product-key-form" method="POST" action="{{url_for("check_key")}}">
