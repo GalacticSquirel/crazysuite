@@ -31,7 +31,7 @@ import key_management as keys
 from models import User
 
 main = create_app()
-limiter = Limiter(key_func=get_remote_address)
+limiter = Limiter(key_func=get_remote_address, default_limits=["1/second"])
 limiter.init_app(main)
 
 
@@ -50,25 +50,22 @@ def webhook():
 #######################       Endpoints        #########################
 ########################################################################
 ########################################################################
+
+
 @main.route('/')
-@limiter.limit("1/second")
 def index():
     return redirect('/home')
 
-
 @main.route('/home')
-@limiter.limit("1/second")
 def home():
     return render_template('index.html')
 
-
 @main.route('/favicon.ico')
+@limiter.exempt()
 def favicon():
     return send_file('templates//favicon.ico', mimetype='image/gif')
 
-
 @main.route('/account')
-@limiter.limit("1/second")
 @login_required
 def account():
     owned_items = keys.owned_items(current_user.id)
@@ -76,98 +73,21 @@ def account():
     
     return render_template("account.html", owned_items=owned_items, name=current_user.name)
 
-
 @main.route('/shop')
-@limiter.limit("1/second")
 def shop():
     shop_items = json.load(open('static/items.json', 'r'))
     with_urls = list(shop_items)
     return render_template('shop.html', shop_items=with_urls)
 
-
-@main.route('/shop/productdetails.css')
-def product_detailscss():
-    return send_file('templates//productdetails.css')
-
-
-@main.route('/shop/style.css')
-def product_detailsstylecss():
-    return send_file('templates//style.css')
-
-
-@main.route('/signup.css')
-def signupcss():
-    return send_file('templates//signup.css')
-
-
-@main.route('/login.css')
-def logincss():
-    return send_file('templates//login.css')
-
-
-@main.route('/admin.css')
-def consolecss():
-    return send_file('templates//console.css')
-
-
-@main.route('/style.css')
-def stylecss():
-    return send_file('templates//style.css')
-
-
-@main.route('/account.css')
-def accountcss():
-    return send_file('templates//account.css')
-
-
-@main.route('/home.css')
-def homecss():
-    return send_file('templates//index.css')
-
-
-@main.route('/not_found.css')
-@main.route('/shop/not_found.css')
-@main.route('/admin/not_found.css')
-def errornot_foundcss():
-    return send_file('templates//not_found.css')
-
-
-@main.route('/shop.css')
-def shopcss():
-    return send_file('templates//shop.css')
-
-
 @main.route('/terms')
-@limiter.limit("1/second")
 def terms():
     return render_template('terms.html')
 
-
-@main.route('/terms.css')
-def termscss():
-    return send_file('templates//terms.css')
-
-
 @main.route('/About-Us')
-@limiter.limit("1/second")
 def about_us():
     return render_template('about-us.html')
 
-
-@main.route('/terms.css')
-def about_uscss():
-    return send_file('templates//about-us.css')
-
-
-@main.route('/rate-limit.css')
-@main.route('/shop/rate-limit.css')
-@main.route('/admin/rate-limit.css')
-def rate_limitcss():
-    return send_file('templates//rate_limit.css')
-
-
 @main.route('/shop/<string:item_name>')
-@limiter.limit("1/second")
 def productdetails(item_name: str):
     """
         Render the product details page for the given item. If the item does not exist, render a placeholder page.
@@ -207,6 +127,71 @@ def productdetails(item_name: str):
 
 ########################################################################
 ########################################################################
+#######################        CSS         #############################
+########################################################################
+########################################################################
+
+
+@main.route('/terms.css')
+def about_uscss():
+    return send_file('templates//about-us.css')
+
+@main.route('/rate-limit.css')
+@main.route('/shop/rate-limit.css')
+@main.route('/admin/rate-limit.css')
+@main.route('/keys/rate-limit.css')
+@limiter.exempt()
+def rate_limitcss():
+    return send_file('templates//rate_limit.css')
+
+@main.route('/terms.css')
+def termscss():
+    return send_file('templates//terms.css')
+
+@main.route('/shop/productdetails.css')
+def product_detailscss():
+    return send_file('templates//productdetails.css')
+
+@main.route('/signup.css')
+def signupcss():
+    return send_file('templates//signup.css')
+
+@main.route('/login.css')
+def logincss():
+    return send_file('templates//login.css')
+
+@main.route('/admin.css')
+def consolecss():
+    return send_file('templates//console.css')
+
+@main.route('/style.css')
+@main.route('/shop/style.css')
+@limiter.exempt()
+def stylecss():
+    return send_file('templates//style.css')
+
+@main.route('/account.css')
+def accountcss():
+    return send_file('templates//account.css')
+
+@main.route('/home.css')
+def homecss():
+    return send_file('templates//index.css')
+
+@main.route('/not_found.css')
+@main.route('/shop/not_found.css')
+@main.route('/admin/not_found.css')
+@main.route('/keys/not_found.css')
+@limiter.exempt()
+def errornot_foundcss():
+    return send_file('templates//not_found.css')
+
+@main.route('/shop.css')
+def shopcss():
+    return send_file('templates//shop.css')
+
+########################################################################
+########################################################################
 #######################       Logic        #############################
 ########################################################################
 ########################################################################
@@ -223,7 +208,6 @@ def allowed_file(filename: str) -> bool:
     bool: True if the file has an allowed extension, False otherwise.
     """
     return True if filename.rsplit('.', 1)[1].lower() in {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'} else False
-
 
 def password_check(password: str) -> bool:
     l, u, p, d = 0, 0, 0, 0
@@ -248,7 +232,6 @@ def password_check(password: str) -> bool:
         return False
     return True
 
-
 ########################################################################
 ########################################################################
 #######################       Admin        #############################
@@ -257,6 +240,7 @@ def password_check(password: str) -> bool:
 
 
 @main.route('/images/<image_name>')
+@limiter.exempt()
 def images(image_name: str):
     """
     Send the requested image file if it exists, otherwise send a placeholder image.
@@ -272,9 +256,7 @@ def images(image_name: str):
     else:
         return send_file(f"templates//images//place_holder.png")
 
-
 @main.route('/admin', methods=['GET', 'POST'])
-@limiter.limit("1/second")
 @login_required
 def admin():
     """
@@ -304,9 +286,7 @@ def admin():
     else:
         return redirect('/')
 
-
 @main.route('/admin/add', methods=['GET', 'POST'])
-@limiter.limit("1/second")
 @login_required
 def add():
     """
@@ -368,6 +348,7 @@ def api_prices():
 ########################################################################
 ########################################################################
 
+
 @main.route("/keys/check", methods=["POST"])
 @login_required
 def check_key():
@@ -379,19 +360,23 @@ def check_key():
         return redirect("/account")
     return redirect("/account")
 
-from builtins import str
+
 @main.route("/keys/owned", methods=["GET"])
 @login_required
 def owned():
     owned_items = keys.owned_items(current_user.id)
-    owned_items = list(map(lambda item: {item[0]: item[1]}, owned_items.items()))
-    
-    return render_template("owned.html", owned_items=owned_items, str=str)
+    urls = {}
+    for item in owned_items:
+        pass
+    print(owned_items)
+    return render_template("owned.html", owned_items=owned_items)
 ########################################################################
 ########################################################################
 #######################       Auth       ###############################
 ########################################################################
 ########################################################################
+
+
 def captcha(form_response: str) -> bool:
     """
         Check the validity of the provided CAPTCHA response.
@@ -414,7 +399,6 @@ def captcha(form_response: str) -> bool:
 @limiter.limit("24/day")
 @limiter.limit("30/hour")
 @limiter.limit("30/minute")
-@limiter.limit("1/second")
 def login():
     """
         Handle the login process for a user.
@@ -461,20 +445,16 @@ def login():
     else:
         return redirect('/')
 
-
 @main.route('/signup', methods=['GET'])  # we define the sign up path
 @limiter.limit("30/minute")
-@limiter.limit("1/second")
 def signup():  # define the sign up function
     if not current_user.is_authenticated:
         return render_template('signup.html')
     else:
         return redirect('/')
 
-
 @main.route('/signup', methods=['POST'])  # we define the sign up path
 @limiter.limit("15/minute")
-@limiter.limit("1/second")
 # @login_required
 def signupPOST():  # define the sign up function
     """
@@ -530,7 +510,6 @@ def signupPOST():  # define the sign up function
     else:
         return redirect('/')
 
-
 @main.route('/ChangePass', methods=['POST'])
 @limiter.limit("12/day")
 @limiter.limit("1/hour")
@@ -584,9 +563,7 @@ def ChangePass():
     else:
         return redirect('/account')
 
-
 @main.route('/logout')
-@limiter.limit("1/second")
 @login_required
 def logout():
     logout_user()
@@ -599,7 +576,6 @@ def verify(key: str):
         data = json.load(f)
     uid = "None"
     if key in data.values():
-
         for k, v in data.items():
             if v == key:
                 uid = k
@@ -612,10 +588,8 @@ def verify(key: str):
         return "Key does not exist"
     return uid
 
-
 @main.route('/verifyinit')
 def verifyinit():
-
     key = str(uuid.uuid4())
     with open("email_verify.json","r") as f:
         data = json.load(f)
@@ -626,7 +600,6 @@ def verifyinit():
     email_handler.send(f"http://127.0.0.1:5000/verify/{str(key)}", current_user.email)
     return redirect(url_for("account"))
 
-
 @main.before_first_request
 def clean_up_on_startup():
     if os.path.exists('LOGS/admin_add.log'):
@@ -636,12 +609,12 @@ def clean_up_on_startup():
     if os.path.exists('LOGS/rate_limit.log'):
         os.remove('LOGS/rate_limit.log')
 
-
 ########################################################################
 ########################################################################
 #######################       Errors        ############################
 ########################################################################
 ########################################################################
+
 
 def handle_not_found(error):
     if not os.path.exists("LOGS/404.log"):
