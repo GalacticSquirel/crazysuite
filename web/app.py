@@ -361,15 +361,6 @@ def check_key():
     return redirect("/account")
 
 
-@main.route("/keys/owned", methods=["GET"])
-@login_required
-def owned():
-    owned_items = keys.owned_items(current_user.id)
-    urls = {}
-    for item in owned_items:
-        pass
-    print(owned_items)
-    return render_template("owned.html", owned_items=owned_items)
 ########################################################################
 ########################################################################
 #######################       Auth       ###############################
