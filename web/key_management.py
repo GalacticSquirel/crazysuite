@@ -6,7 +6,7 @@ key_to_product = {key: product for product, product_keys in json.load(open("keys
 
 def save(data):
     with open('keys.json', 'w') as f:
-        json.dump(data, f)
+        json.dump(data, f, indent=4)
 
 
 def get_products() -> list:

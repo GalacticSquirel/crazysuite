@@ -140,6 +140,7 @@ def about_uscss():
 @main.route('/shop/rate-limit.css')
 @main.route('/admin/rate-limit.css')
 @main.route('/keys/rate-limit.css')
+@main.route('/verify/rate-limit.css')
 @main.route('/download/rate-limit.css')
 @limiter.exempt()
 def rate_limitcss():
@@ -183,6 +184,7 @@ def homecss():
 @main.route('/shop/not_found.css')
 @main.route('/admin/not_found.css')
 @main.route('/keys/not_found.css')
+@main.route('/verify/not_found.css')
 @main.route('/download/not_found.css')
 @limiter.exempt()
 def errornot_foundcss():
@@ -351,17 +353,27 @@ def api_prices():
 ########################################################################
 
 
-@main.route("/keys/check", methods=["POST"])
+@main.route("/keys/redeem", methods=["POST"])
+@limiter.limit("30/minute")
 @login_required
-def check_key():
+def redeem_key():
     key = request.form.get('key')
-    if key:
-        print(key)
-        print(keys.redeem(key,current_user.id))
-    else:
+    verify = request.form.get('cf-turnstile-response')
+    if verify == None:
+        flash('Failed Captcha!')
         return redirect("/account")
-    return redirect("/account")
-
+    elif captcha(verify) == True:
+        if key:
+            print(key)
+            print(keys.redeem(key,current_user.id))
+            flash('Key activated!')
+            return redirect("/account")
+        else:
+            flash('Invalid key!')
+            return redirect("/account")
+    else:
+        flash('Failed Captcha!')
+        return redirect("/account")
 
 ########################################################################
 ########################################################################

@@ -27,7 +27,14 @@
                     {% endfor %}
                 </div>
             </form>
-            <form name="Activate" class="product-key-form" method="POST" action="{{url_for("check_key")}}">
+            <form name="Activate" class="product-key-form" method="POST" action="{{url_for("redeem_key")}}">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <div class="notification">
+                            {{ messages[0] }}
+                        </div>
+                    {% endif %}
+                {% endwith %}
                 <div id="container-tools">
                     <div class="search-area" style="width: calc(100% - 75px); margin: 20px; margin-top: 5px;">
                         <input type="text" id="key" name="key" placeholder="Product Key" />
