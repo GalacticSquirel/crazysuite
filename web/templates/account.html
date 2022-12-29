@@ -21,13 +21,13 @@
                     <p class="owned-items-title">Owned Products:</p>
                     {% for item in owned_items %}
 
-                        <a href="{{ "".join(item.values()) }}">{{ "".join(item.keys()) }}</a>
+                        <a href="{{ ''.join(item.values()) }}">{{ ''.join(item.keys()) }}</a>
                         <br/>
                     
                     {% endfor %}
                 </div>
             </form>
-            <form name="Activate" class="product-key-form" method="POST" action="{{url_for("redeem_key")}}">
+            <form name="Activate" class="product-key-form" method="POST" action="{{url_for('redeem_key')}}">
                 {% with messages = get_flashed_messages() %}
                     {% if messages %}
                         <div class="notification">
@@ -45,7 +45,7 @@
                     <button>Activate Product Key</button>
                 </div>
             </form>
-            <form name="ChangePass" method="POST" action="{{url_for("ChangePass")}}" id="fm" style="height: 620px">
+            <form name="ChangePass" method="POST" action="{{url_for('ChangePass')}}" id="fm" style="height: 620px">
                 <div vertical-layout id="vertical-layout">
                     <h3>Password Change</h3>
         
@@ -70,7 +70,7 @@
                     </div>
                 </div>
             </form>
-            <form name="AccountDeactivate" method="POST" action="{{url_for("login")}}" id="fm" style="height: 610px">
+            <form name="AccountDeactivate" method="POST" action="{{url_for('login')}}" id="fm" style="height: 610px">
                 <div vertical-layout id="vertical-layout">
                     <h3>Account Deactivation</h3>
                     <p style="text-align: center;">
