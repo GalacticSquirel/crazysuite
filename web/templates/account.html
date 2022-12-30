@@ -20,10 +20,8 @@
                 <div class="owned-items">
                     <p class="owned-items-title">Owned Products:</p>
                     {% for item in owned_items %}
-
-                        <a href="{{ ''.join(item.values()) }}">{{ ''.join(item.keys()) }}</a>
-                        <br/>
-                    
+                        <p style="display: inline;">{{ ''.join(item.keys()) }}</p>
+                        <button style="display: inline;" href="{{ ''.join(item.values()) }}">Download</button>
                     {% endfor %}
                 </div>
             </form>

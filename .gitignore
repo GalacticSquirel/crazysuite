@@ -153,3 +153,4 @@ cython_debug/
 ui/secrets.json
 web/secrets.json
 web/LOGS/*
+web/ngrok.exe

@@ -45,6 +45,7 @@ def webhook():
     else:
         return jsonify({"error": "Failed"})
 
+
 ########################################################################
 ########################################################################
 #######################       Endpoints        #########################
@@ -55,7 +56,18 @@ def webhook():
 @main.route('/')
 def index():
     return redirect('/home')
-
+@main.route("/download/<string:product_name>")
+def download(product_name: str):
+    valid = list(map(lambda x: x["name"], json.load(open("static/items.json", "r")) ))
+    if product_name in valid:
+        if product_name in keys.owned_items(1):
+            return send_file(f"static/products/{product_name}.zip")
+        else:
+            return "not owned by you"
+    else:
+        return "not a valid product"
+        
+    
 @main.route('/home')
 def home():
     return render_template('index.html')
@@ -86,6 +98,10 @@ def terms():
 @main.route('/About-Us')
 def about_us():
     return render_template('about-us.html')
+
+@main.route('/Privacy')
+def privacy():
+    return render_template('privacy.html')
 
 @main.route('/shop/<string:item_name>')
 def productdetails(item_name: str):
@@ -132,16 +148,17 @@ def productdetails(item_name: str):
 ########################################################################
 
 
-@main.route('/terms.css')
+@main.route('/privacy.css')
+def privacycss():
+    return send_file('templates//privacy.css')
+
+@main.route('/about_us.css')
 def about_uscss():
     return send_file('templates//about-us.css')
 
 @main.route('/rate-limit.css')
-@main.route('/shop/rate-limit.css')
-@main.route('/admin/rate-limit.css')
-@main.route('/keys/rate-limit.css')
-@main.route('/verify/rate-limit.css')
-@main.route('/download/rate-limit.css')
+@main.route('/*/rate-limit.css')
+
 @limiter.exempt()
 def rate_limitcss():
     return send_file('templates//rate_limit.css')
@@ -606,13 +623,14 @@ def verifyinit():
     return redirect(url_for("account"))
 
 @main.before_first_request
-def clean_up_on_startup():
+def clean_fup_on_startup():
     if os.path.exists('LOGS/admin_add.log'):
         os.remove('LOGS/admin_add.log')
     if os.path.exists('LOGS/404.log'):
         os.remove('LOGS/404.log')
     if os.path.exists('LOGS/rate_limit.log'):
         os.remove('LOGS/rate_limit.log')
+
 
 ########################################################################
 ########################################################################
