@@ -190,6 +190,10 @@ ul{
     padding-bottom: 5px;
 }
 
+.footer-content a{
+    color: #3273dc;
+}
+
 .footer-content a:hover {
     color: var(--white);
 }
