@@ -171,3 +171,8 @@ select:focus {
 a {
   color: #fff;
 }
+
+.download {
+  font-weight: bolder;
+  color: darkgray;
+}
